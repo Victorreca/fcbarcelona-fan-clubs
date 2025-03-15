@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FanClub } from '../../interfaces/fanclub';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { FanclubService } from '../../services/fanclub.service';
 
 @Component({
   selector: 'app-list-fanclubs',
@@ -9,7 +10,7 @@ import { RouterLink } from '@angular/router';
   templateUrl: './list-fanclubs.component.html',
   styleUrl: './list-fanclubs.component.scss',
 })
-export class ListFanclubsComponent {
+export class ListFanclubsComponent implements OnInit {
   listFanclubs: FanClub[] = [
     {
       id: 1,
@@ -27,4 +28,16 @@ export class ListFanclubsComponent {
       },
     },
   ];
+
+  private fanClubService = inject(FanclubService);
+
+  ngOnInit() {
+    this.getListFanClubs();
+  }
+
+  getListFanClubs() {
+    this.fanClubService.getListFanClubs().subscribe((data) => {
+      console.log(data);
+    });
+  }
 }
