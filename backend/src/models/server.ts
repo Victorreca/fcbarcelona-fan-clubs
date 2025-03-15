@@ -1,4 +1,5 @@
 import express, { Application, Request, Response } from "express";
+import cors from "cors";
 import routesFanClub from "../routes/fanClub";
 import db from "../db/connection";
 class Server {
@@ -29,6 +30,8 @@ class Server {
 
   middlewares() {
     this.app.use(express.json());
+
+    this.app.use(cors());
   }
 
   async dbConnect() {
