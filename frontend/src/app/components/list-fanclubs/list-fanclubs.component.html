@@ -21,7 +21,7 @@
           Total miembros
         </th>
         <th scope="col" class="px-6 py-3">
-          Eventos
+          Próximo evento
         </th>
         <th scope="col" class="px-6 py-3">
           Acciones
@@ -51,11 +51,13 @@
         </td>
         <td class="px-6 py-4">
           <ul>
-            @for(event of fanclub.events; track event.id){
+            <!-- @for(event of fanclub.events; track event.id){ -->
             <li>
-              <strong>{{ event.name }}</strong> - {{ event.date | date:'dd/MM/yyyy'}} ({{ event.location }})
+              <strong>{{ fanclub.event?.name }}</strong> - {{ fanclub.event?.date | date:'dd/MM/yyyy'}} - {{
+              fanclub.event?.time}} ({{
+              fanclub.event?.location }})
             </li>
-            }
+            <!-- } -->
           </ul>
 
         </td>

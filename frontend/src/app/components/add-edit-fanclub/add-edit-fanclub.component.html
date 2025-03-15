@@ -59,12 +59,35 @@
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
         placeholder="Longitud">
     </div>
-    <div>
-      <label for="eventsClub" class="block mb-2 text-sm font-medium text-gray-900">Evento próximo de la peña
-        (opcional)</label>
-      <input type="text" formControlName="eventsClub" id="eventsClub"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-        placeholder="Próximo evento">
+
+    <div formGroupName="eventClub">
+      <div>
+        <label for="eventName" class="block mb-2 text-sm font-medium text-gray-900">Nombre del evento (opcional)</label>
+        <input type="text" formControlName="name" id="eventName"
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          placeholder="Nombre del evento">
+      </div>
+
+      @if(addClubForm.get('eventClub.name')?.value) {
+      <div>
+        <label for="eventDate" class="block mb-2 text-sm font-medium text-gray-900">Fecha del evento</label>
+        <input type="date" formControlName="date" id="eventDate"
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+      </div>
+
+      <div>
+        <label for="eventTime" class="block mb-2 text-sm font-medium text-gray-900">Hora de inicio del evento</label>
+        <input type="time" formControlName="time" id="eventTime"
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+      </div>
+
+      <div>
+        <label for="eventLocation" class="block mb-2 text-sm font-medium text-gray-900">Ubicación del evento</label>
+        <input type="text" formControlName="location" id="eventLocation"
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          placeholder="Ubicación del evento">
+      </div>
+      }
     </div>
 
 
@@ -75,8 +98,8 @@
       <button type="submit" [disabled]="addClubForm.invalid"
         [ngClass]="{'opacity-50 cursor-not-allowed': addClubForm.invalid, 'cursor-pointer': !addClubForm.invalid}"
         class="text-white bg-green-700 hover:bg-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center cursor-pointer">Agregar</button>
-      <a routerLink="/" type="submit"
-        class="text-white bg-gray-700 hover:bg-gray-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center cursor-pointer">Volver</a>
+      <button (click)="goBack()" type="button"
+        class="text-white bg-gray-700 hover:bg-gray-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center cursor-pointer">Volver</button>
     </div>
 
   </form>
