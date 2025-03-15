@@ -11,23 +11,7 @@ import { FanclubService } from '../../services/fanclub.service';
   styleUrl: './list-fanclubs.component.scss',
 })
 export class ListFanclubsComponent implements OnInit {
-  listFanclubs: FanClub[] = [
-    {
-      id: 1,
-      name: 'FC Barcelona Fan Club Parets',
-      location: 'Parets del Vallès',
-      latitude: 41.3851,
-      longitude: 2.1734,
-      foundedYear: 1899,
-      membersCount: 10,
-      event: {
-        name: 'Encuentro de socios',
-        date: '2024-06-15',
-        time: '18:00',
-        location: 'Camp Nou',
-      },
-    },
-  ];
+  listFanclubs: FanClub[] = [];
 
   private fanClubService = inject(FanclubService);
 
@@ -37,7 +21,7 @@ export class ListFanclubsComponent implements OnInit {
 
   getListFanClubs() {
     this.fanClubService.getListFanClubs().subscribe((data) => {
-      console.log(data);
+      this.listFanclubs = data;
     });
   }
 }

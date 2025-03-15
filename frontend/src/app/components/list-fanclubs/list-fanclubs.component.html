@@ -49,18 +49,19 @@
         <td class="px-6 py-4">
           {{fanclub.membersCount}}
         </td>
+        @if(fanclub.event){
         <td class="px-6 py-4">
           <ul>
             <!-- @for(event of fanclub.events; track event.id){ -->
             <li>
-              <strong>{{ fanclub.event?.name }}</strong> - {{ fanclub.event?.date | date:'dd/MM/yyyy'}} - {{
-              fanclub.event?.time}} ({{
-              fanclub.event?.location }})
+              <strong>{{ fanclub.event.name }}</strong> - {{ fanclub.event.date | date:'dd/MM/yyyy'}} - {{
+              fanclub.event.time}} ({{
+              fanclub.event.location }})
             </li>
             <!-- } -->
           </ul>
-
         </td>
+        }
         <td class="px-6 py-4">
           <div class="flex">
             <a [routerLink]="['/edit', fanclub.id]" type="button"
