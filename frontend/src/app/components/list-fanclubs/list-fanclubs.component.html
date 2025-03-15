@@ -1,0 +1,80 @@
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+  <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+    <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+      <tr>
+        <th scope="col" class="px-6 py-3">
+          ID
+        </th>
+        <th scope="col" class="px-6 py-3">
+          Peña Blaugrana
+        </th>
+        <th scope="col" class="px-6 py-3">
+          Localización
+        </th>
+        <th scope="col" class="px-6 py-3">
+          Enlace google Maps
+        </th>
+        <th scope="col" class="px-6 py-3">
+          Año fundación
+        </th>
+        <th scope="col" class="px-6 py-3">
+          Total miembros
+        </th>
+        <th scope="col" class="px-6 py-3">
+          Eventos
+        </th>
+        <th scope="col" class="px-6 py-3">
+          Acciones
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      @for(fanclub of listFanclubs; track fanclub.id){
+      <tr class="odd:bg-white even:bg-gray-50  border-b border-gray-200">
+        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+          {{fanclub.id}}
+        </th>
+        <td class="px-6 py-4">
+          {{fanclub.name}}
+        </td>
+        <td class="px-6 py-4">
+          {{fanclub.location}}
+        </td>
+        <td class="px-6 py-4">
+          {{fanclub.latitude}}+{{fanclub.longitude}}
+        </td>
+        <td class="px-6 py-4">
+          {{fanclub.foundedYear}}
+        </td>
+        <td class="px-6 py-4">
+          {{fanclub.membersCount}}
+        </td>
+        <td class="px-6 py-4">
+          <ul>
+            @for(event of fanclub.events; track event.id){
+            <li>
+              <strong>{{ event.name }}</strong> - {{ event.date | date:'dd/MM/yyyy'}} ({{ event.location }})
+            </li>
+            }
+          </ul>
+
+        </td>
+        <td class="px-6 py-4">
+          <div class="flex">
+            <a [routerLink]="['/edit', fanclub.id]" type="button"
+              class="focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 cursor-pointer">Editar</a>
+            <a type="button"
+              class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 cursor-pointer">Eliminar</a>
+          </div>
+        </td>
+      </tr>
+      }
+      <div class="px-6 py-4 flex flex-nowrap gap-2">
+        <a routerLink='/download' type="button"
+          class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none cursor-pointer">Descargar</a>
+        <a routerLink='/add' type="button"
+          class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 cursor-pointer">Agregar</a>
+      </div>
+    </tbody>
+  </table>
+</div>

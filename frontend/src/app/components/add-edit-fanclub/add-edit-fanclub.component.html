@@ -1,0 +1,83 @@
+<div
+  class="w-full max-w-sm sm:max-w-lg xl:max-w-xl 2xl:max-w-2xl p-4 bg-white border border-gray-200 rounded-lg shadow-sm sm:p-6 lg:p-15 my-10 m-auto">
+  <form class="space-y-6" [formGroup]="addClubForm" (ngSubmit)="addFcbClub()">
+    <h5 class="text-xl font-medium text-gray-900">Agregar producto</h5>
+    <div>
+      <label for="clubName" class="block mb-2 text-sm font-medium text-gray-900">Nombre de la peña</label>
+      <input type="text" formControlName="clubName" id="clubName"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+        placeholder="Nombre">
+      @if(addClubForm.get('clubName')?.invalid && addClubForm.get('clubName')?.touched){
+      <p class="text-red-500 text-sm">
+        Indica el nobmre de la peña.
+      </p>
+      }
+    </div>
+    <div>
+      <label for="location" class="block mb-2 text-sm font-medium text-gray-900">Ubicación</label>
+      <input type="text" formControlName="location" id="location"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+        placeholder="Ubicación">
+      @if(addClubForm.get('location')?.invalid && addClubForm.get('location')?.touched){
+      <p class="text-red-500 text-sm">
+        Indica la ubicación.
+      </p>
+      }
+    </div>
+    <div>
+      <label for="foundedYear" class="block mb-2 text-sm font-medium text-gray-900">Año de fundación</label>
+      <input type="number" formControlName="foundedYear" id="foundedYear"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+        placeholder="Año">
+      @if(addClubForm.get('foundedYear')?.invalid && addClubForm.get('foundedYear')?.touched){
+      <p class="text-red-500 text-sm">
+        Ingresa un año válido entre 1800 y {{ currentYear }}.
+      </p>
+      }
+    </div>
+    <div>
+      <label for="membersCount" class="block mb-2 text-sm font-medium text-gray-900">Número de miembros de la
+        peña</label>
+      <input type="number" formControlName="membersCount" id="membersCount"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+        placeholder="Número">
+      @if(addClubForm.get('membersCount')?.invalid && addClubForm.get('membersCount')?.touched){
+      <p class="text-red-500 text-sm">
+        Indica el número de peñistas.
+      </p>
+      }
+    </div>
+    <div>
+      <label for="latitude" class="block mb-2 text-sm font-medium text-gray-900">Latitud (opcional)</label>
+      <input type="text" formControlName="latitude" id="latitude"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+        placeholder="Latitud">
+    </div>
+    <div>
+      <label for="longitude" class="block mb-2 text-sm font-medium text-gray-900">Longitud (opcional)</label>
+      <input type="text" formControlName="longitude" id="longitude"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+        placeholder="Longitud">
+    </div>
+    <div>
+      <label for="eventsClub" class="block mb-2 text-sm font-medium text-gray-900">Evento próximo de la peña
+        (opcional)</label>
+      <input type="text" formControlName="eventsClub" id="eventsClub"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+        placeholder="Próximo evento">
+    </div>
+
+
+    @if (errorMessage) {
+    <p class="text-red-500 text-sm text-center">{{ errorMessage }}</p>
+    }
+    <div class="justify-center flex gap-4">
+      <button type="submit" [disabled]="addClubForm.invalid"
+        [ngClass]="{'opacity-50 cursor-not-allowed': addClubForm.invalid, 'cursor-pointer': !addClubForm.invalid}"
+        class="text-white bg-green-700 hover:bg-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center cursor-pointer">Agregar</button>
+      <a routerLink="/" type="submit"
+        class="text-white bg-gray-700 hover:bg-gray-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center cursor-pointer">Volver</a>
+    </div>
+
+  </form>
+</div>
