@@ -40,5 +40,8 @@ const FanClub = connection_1.default.define("fansclubs", {
             len: [4, 4],
         },
     },
+}, {
+    createdAt: false,
+    updatedAt: false,
 });
 exports.default = FanClub;
