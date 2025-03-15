@@ -1,0 +1,12 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const fanClub_1 = require("../controllers/fanClub");
+const fanClub_2 = require("../controllers/fanClub");
+const router = (0, express_1.Router)();
+router.get("/", fanClub_1.getFansClub);
+router.get("/:id", fanClub_2.getFanClub);
+router.delete("/:id", fanClub_1.deleteFanClub);
+router.post("/", fanClub_1.addFanClub);
+router.put("/:id", fanClub_1.updateFanClub);
+exports.default = router;
