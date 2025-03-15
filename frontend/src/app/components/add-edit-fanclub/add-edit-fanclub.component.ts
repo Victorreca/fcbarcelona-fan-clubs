@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { Location } from '@angular/common';
 import {
   FormBuilder,
   FormGroup,
@@ -10,7 +10,7 @@ import { CommonModule } from '@angular/common';
 import { FanClub } from '../../interfaces/fanclub';
 @Component({
   selector: 'app-add-edit-fanclub',
-  imports: [RouterLink, ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './add-edit-fanclub.component.html',
   styleUrl: './add-edit-fanclub.component.scss',
 })
@@ -18,7 +18,7 @@ export class AddEditFanclubComponent {
   currentYear: number = new Date().getFullYear();
   errorMessage: string | null = null;
   private fb = inject(FormBuilder);
-  private router = inject(Router);
+  private location = inject(Location);
 
   addClubForm: FormGroup = this.fb.group({
     clubName: ['', [Validators.required, Validators.minLength(2)]],
@@ -38,8 +38,17 @@ export class AddEditFanclubComponent {
     ],
     latitude: [''],
     longitude: [''],
-    eventsClub: [''],
+    eventClub: this.fb.group({
+      name: [''],
+      date: [''],
+      time: [''],
+      location: [''],
+    }),
   });
+
+  goBack() {
+    this.location.back(); // Vuelve a la página anterior
+  }
 
   addFcbClub() {
     if (this.addClubForm.valid) {

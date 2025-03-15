@@ -19,41 +19,12 @@ export class ListFanclubsComponent {
       longitude: 2.1734,
       foundedYear: 1899,
       membersCount: 10,
-      events: [
-        {
-          id: 1,
-          name: 'Encuentro de socios',
-          date: '2024-06-15',
-          location: 'Camp Nou',
-        },
-      ],
-    },
-    {
-      id: 2,
-      name: 'FC Barcelona Fan Club La Llagosta',
-      location: 'La Llagosta',
-      latitude: 41.3851,
-      longitude: 2.1734,
-      foundedYear: 1956,
-      membersCount: 45,
-      events: [
-        {
-          id: 1,
-          name: 'Partido Champios',
-          date: '2025-03-12',
-          location: 'Peña Blaugrana La Llagosta',
-        },
-      ],
-    },
-    {
-      id: 3,
-      name: 'FC Barcelona Fan Club Mollet',
-      location: 'Mollet',
-      latitude: 41.3851,
-      longitude: 2.1734,
-      foundedYear: 1956,
-      membersCount: 115,
-      events: [],
+      event: {
+        name: 'Encuentro de socios',
+        date: '2024-06-15',
+        time: '18:00',
+        location: 'Camp Nou',
+      },
     },
   ];
 }
