@@ -1,10 +1,15 @@
+@if (loading) {
+<div class="fixed inset-0 flex items-center justify-center -z-10">
+  <app-loader></app-loader>
+</div>
+} @else {
 <div
   class="w-full max-w-sm sm:max-w-lg xl:max-w-xl 2xl:max-w-2xl p-4 bg-white border border-gray-200 rounded-lg shadow-sm sm:p-6 lg:p-15 my-10 m-auto">
   <form class="space-y-6" [formGroup]="addClubForm" (ngSubmit)="addFcbClub()">
     <h5 class="text-xl font-medium text-gray-900">Agregar producto</h5>
     <div>
       <label for="clubName" class="block mb-2 text-sm font-medium text-gray-900">Nombre de la peña</label>
-      <input type="text" formControlName="clubName" id="clubName"
+      <input type="text" formControlName="name" id="clubName"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
         placeholder="Nombre">
       @if(addClubForm.get('clubName')?.invalid && addClubForm.get('clubName')?.touched){
@@ -101,6 +106,6 @@
       <button (click)="goBack()" type="button"
         class="text-white bg-gray-700 hover:bg-gray-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center cursor-pointer">Volver</button>
     </div>
-
   </form>
 </div>
+}

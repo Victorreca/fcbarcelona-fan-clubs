@@ -4,7 +4,7 @@
 </div>
 } @else {
 <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-  <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+  @if(listFanclubs.length > 0){ <table class="w-full text-sm text-left rtl:text-right text-gray-500">
     <thead class="text-xs text-gray-700 uppercase bg-gray-50">
       <tr>
         <th scope="col" class="px-6 py-3">
@@ -46,7 +46,9 @@
           {{fanclub.location}}
         </td>
         <td class="px-6 py-4">
+          @if(fanclub.latitude && fanclub.longitude){
           {{fanclub.latitude}}+{{fanclub.longitude}}
+          }
         </td>
         <td class="px-6 py-4">
           {{fanclub.foundedYear}}
@@ -66,6 +68,10 @@
             <!-- } -->
           </ul>
         </td>
+        } @else {
+        <td class="px-6 py-4">
+          Sin eventos
+        </td>
         }
         <td class="px-6 py-4">
           <div class="flex">
@@ -77,13 +83,22 @@
         </td>
       </tr>
       }
-      <div class="px-6 py-4 flex flex-nowrap gap-2">
-        <a routerLink='/download' type="button"
-          class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none cursor-pointer">Descargar</a>
-        <a routerLink='/add' type="button"
-          class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 cursor-pointer">Agregar</a>
-      </div>
     </tbody>
   </table>
+  } @else {
+  <div class="px-6 py-4 flex flex-nowrap gap-2">
+    <h2>No hay peñas Blaugrana para mostrar.</h2>
+  </div>
+  }
+
+  <div class="px-6 py-4 flex flex-nowrap gap-2">
+    @if(listFanclubs.length > 0){
+    <a routerLink='/download' type="button"
+      class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none cursor-pointer">Descargar</a>
+    }
+    <a routerLink='/add' type="button"
+      class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 cursor-pointer">Agregar</a>
+  </div>
+
 </div>
 }

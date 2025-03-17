@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { FanclubService } from '../../services/fanclub.service';
 import { LoaderComponent } from '../../shared/loader/loader.component';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-list-fanclubs',
@@ -16,6 +17,7 @@ export class ListFanclubsComponent implements OnInit {
   loading: boolean = false;
 
   private fanClubService = inject(FanclubService);
+  private toastr = inject(ToastrService);
 
   ngOnInit() {
     this.getListFanClubs();
@@ -34,5 +36,6 @@ export class ListFanclubsComponent implements OnInit {
     this.fanClubService.deleteFanClub(id).subscribe(() => {
       this.getListFanClubs();
     });
+    this.toastr.warning('Peña eliminada con éxito', 'Peña eliminada');
   }
 }

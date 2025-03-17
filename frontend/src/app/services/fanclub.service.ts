@@ -20,8 +20,10 @@ export class FanclubService {
   getListFanClubs(): Observable<FanClub[]> {
     return this.http.get<FanClub[]>(this.myAppUrl + this.myApiUrl);
   }
-
   deleteFanClub(id: number): Observable<void> {
     return this.http.delete<void>(`${this.myAppUrl}${this.myApiUrl}${id}`);
+  }
+  addFanClub(fanClub: FanClub): Observable<void> {
+    return this.http.post<void>(`${this.myAppUrl}${this.myApiUrl}`, fanClub);
   }
 }

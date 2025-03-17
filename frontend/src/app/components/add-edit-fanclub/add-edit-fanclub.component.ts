@@ -8,9 +8,13 @@ import {
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { FanClub } from '../../interfaces/fanclub';
+import { FanclubService } from '../../services/fanclub.service';
+import { ToastrService } from 'ngx-toastr';
+import { LoaderComponent } from '../../shared/loader/loader.component';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-add-edit-fanclub',
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, LoaderComponent],
   templateUrl: './add-edit-fanclub.component.html',
   styleUrl: './add-edit-fanclub.component.scss',
 })
@@ -19,9 +23,13 @@ export class AddEditFanclubComponent {
   errorMessage: string | null = null;
   private fb = inject(FormBuilder);
   private location = inject(Location);
+  private fanClubService = inject(FanclubService);
+  private toastr = inject(ToastrService);
+  private router = inject(Router);
+  loading: boolean = false;
 
   addClubForm: FormGroup = this.fb.group({
-    clubName: ['', [Validators.required, Validators.minLength(2)]],
+    name: ['', [Validators.required, Validators.minLength(2)]],
     location: ['', [Validators.required, Validators.minLength(2)]],
     foundedYear: [
       '',
@@ -36,8 +44,8 @@ export class AddEditFanclubComponent {
       '',
       [Validators.required, Validators.pattern('^[0-9]+$'), Validators.min(1)],
     ],
-    latitude: [''],
-    longitude: [''],
+    latitude: [null],
+    longitude: [null],
     eventClub: this.fb.group({
       name: [''],
       date: [''],
@@ -47,17 +55,27 @@ export class AddEditFanclubComponent {
   });
 
   goBack() {
-    this.location.back(); // Vuelve a la página anterior
+    this.location.back();
   }
 
   addFcbClub() {
     if (this.addClubForm.valid) {
       const newFanClub: FanClub = this.addClubForm.value;
-      console.log(newFanClub);
-      console.log(this.addClubForm);
-      // this.router.navigate(['/']);
+      this.loading = true;
+      this.fanClubService.addFanClub(newFanClub).subscribe({
+        next: (res) => {
+          console.log('Peña añadida con éxito', res);
+          this.loading = false;
+          this.router.navigate(['/']);
+        },
+        error: (err) => {
+          console.error('Error al añadir la peña:', err);
+        },
+      });
+      this.toastr.success('Peña añadida con éxito', 'Peña registrada');
     } else {
       this.errorMessage = 'Por favor, completa todos los campos requeridos.';
+      this.toastr.error('No se puedo añadir la peña', 'Peña añadida');
     }
   }
 }
