@@ -23,9 +23,16 @@ export class ListFanclubsComponent implements OnInit {
 
   getListFanClubs() {
     this.loading = true;
-    this.fanClubService.getListFanClubs().subscribe((data) => {
+    this.fanClubService.getListFanClubs().subscribe((data: FanClub[]) => {
       this.listFanclubs = data;
       this.loading = false;
+    });
+  }
+
+  deleteFanClub(id: number) {
+    this.loading = true;
+    this.fanClubService.deleteFanClub(id).subscribe(() => {
+      this.getListFanClubs();
     });
   }
 }
