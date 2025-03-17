@@ -1,5 +1,10 @@
+@if (loading) {
+<div class="fixed inset-0 flex items-center justify-center -z-10">
+  <app-loader></app-loader>
+</div>
+} @else {
 <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-  <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+  @if(listFanclubs.length > 0){ <table class="w-full text-sm text-left rtl:text-right text-gray-500">
     <thead class="text-xs text-gray-700 uppercase bg-gray-50">
       <tr>
         <th scope="col" class="px-6 py-3">
@@ -41,7 +46,9 @@
           {{fanclub.location}}
         </td>
         <td class="px-6 py-4">
+          @if(fanclub.latitude && fanclub.longitude){
           {{fanclub.latitude}}+{{fanclub.longitude}}
+          }
         </td>
         <td class="px-6 py-4">
           {{fanclub.foundedYear}}
@@ -49,34 +56,49 @@
         <td class="px-6 py-4">
           {{fanclub.membersCount}}
         </td>
+        @if(fanclub.event){
         <td class="px-6 py-4">
           <ul>
             <!-- @for(event of fanclub.events; track event.id){ -->
             <li>
-              <strong>{{ fanclub.event?.name }}</strong> - {{ fanclub.event?.date | date:'dd/MM/yyyy'}} - {{
-              fanclub.event?.time}} ({{
-              fanclub.event?.location }})
+              <strong>{{ fanclub.event.name }}</strong> - {{ fanclub.event.date | date:'dd/MM/yyyy'}} - {{
+              fanclub.event.time}} ({{
+              fanclub.event.location }})
             </li>
             <!-- } -->
           </ul>
-
         </td>
+        } @else {
+        <td class="px-6 py-4">
+          Sin eventos
+        </td>
+        }
         <td class="px-6 py-4">
           <div class="flex">
             <a [routerLink]="['/edit', fanclub.id]" type="button"
               class="focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 cursor-pointer">Editar</a>
-            <a type="button"
-              class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 cursor-pointer">Eliminar</a>
+            <button type="button" (click)="deleteFanClub(fanclub.id!)"
+              class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 cursor-pointer">Eliminar</button>
           </div>
         </td>
       </tr>
       }
-      <div class="px-6 py-4 flex flex-nowrap gap-2">
-        <a routerLink='/download' type="button"
-          class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none cursor-pointer">Descargar</a>
-        <a routerLink='/add' type="button"
-          class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 cursor-pointer">Agregar</a>
-      </div>
     </tbody>
   </table>
+  } @else {
+  <div class="px-6 py-4 flex flex-nowrap gap-2">
+    <h2>No hay peñas Blaugrana para mostrar.</h2>
+  </div>
+  }
+
+  <div class="px-6 py-4 flex flex-nowrap gap-2">
+    @if(listFanclubs.length > 0){
+    <a routerLink='/download' type="button"
+      class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none cursor-pointer">Descargar</a>
+    }
+    <a routerLink='/add' type="button"
+      class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 cursor-pointer">Agregar</a>
+  </div>
+
 </div>
+}
