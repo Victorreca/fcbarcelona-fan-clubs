@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import {
   FormBuilder,
@@ -11,14 +11,14 @@ import { FanClub } from '../../interfaces/fanclub';
 import { FanclubService } from '../../services/fanclub.service';
 import { ToastrService } from 'ngx-toastr';
 import { LoaderComponent } from '../../shared/loader/loader.component';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 @Component({
   selector: 'app-add-edit-fanclub',
   imports: [ReactiveFormsModule, CommonModule, LoaderComponent],
   templateUrl: './add-edit-fanclub.component.html',
   styleUrl: './add-edit-fanclub.component.scss',
 })
-export class AddEditFanclubComponent {
+export class AddEditFanclubComponent implements OnInit {
   currentYear: number = new Date().getFullYear();
   errorMessage: string | null = null;
   private fb = inject(FormBuilder);
@@ -26,7 +26,10 @@ export class AddEditFanclubComponent {
   private fanClubService = inject(FanclubService);
   private toastr = inject(ToastrService);
   private router = inject(Router);
+  private activateRoute = inject(ActivatedRoute);
   loading: boolean = false;
+  fanClubId: number | null = null;
+  operation: string = '';
 
   addClubForm: FormGroup = this.fb.group({
     name: ['', [Validators.required, Validators.minLength(2)]],
@@ -54,6 +57,25 @@ export class AddEditFanclubComponent {
     }),
   });
 
+  ngOnInit() {
+    this.fanClubId = Number(this.activateRoute.snapshot.paramMap.get('id'));
+    if (this.fanClubId !== 0) {
+      this.operation = 'Editar';
+      this.getFanClub(this.fanClubId);
+    } else {
+      this.operation = 'Añadir';
+    }
+  }
+
+  getFanClub(id: number) {
+    this.loading = true;
+    this.fanClubService.getFanClub(id).subscribe((data: FanClub) => {
+      console.log(data);
+      this.loading = false;
+      this.addClubForm.patchValue(data);
+    });
+  }
+
   goBack() {
     this.location.back();
   }
@@ -61,18 +83,39 @@ export class AddEditFanclubComponent {
   addFcbClub() {
     if (this.addClubForm.valid) {
       const newFanClub: FanClub = this.addClubForm.value;
-      this.loading = true;
-      this.fanClubService.addFanClub(newFanClub).subscribe({
-        next: (res) => {
-          console.log('Peña añadida con éxito', res);
-          this.loading = false;
-          this.router.navigate(['/']);
-        },
-        error: (err) => {
-          console.error('Error al añadir la peña:', err);
-        },
-      });
-      this.toastr.success('Peña añadida con éxito', 'Peña registrada');
+
+      if (this.fanClubId !== 0) {
+        this.loading = true;
+        this.fanClubService
+          .updateFanClub(this.fanClubId!, newFanClub)
+          .subscribe({
+            next: (res) => {
+              console.log('Peña actualizada con éxito', res);
+              this.loading = false;
+              this.toastr.success(
+                'Peña actualizada con éxito',
+                'Peña actualizada'
+              );
+              this.router.navigate(['/']);
+            },
+            error: (err) => {
+              console.error('Error al actualizar la peña:', err);
+            },
+          });
+      } else {
+        this.loading = true;
+        this.fanClubService.addFanClub(newFanClub).subscribe({
+          next: (res) => {
+            console.log('Peña añadida con éxito', res);
+            this.loading = false;
+            this.router.navigate(['/']);
+            this.toastr.success('Peña añadida con éxito', 'Peña registrada');
+          },
+          error: (err) => {
+            console.error('Error al añadir la peña:', err);
+          },
+        });
+      }
     } else {
       this.errorMessage = 'Por favor, completa todos los campos requeridos.';
       this.toastr.error('No se puedo añadir la peña', 'Peña añadida');

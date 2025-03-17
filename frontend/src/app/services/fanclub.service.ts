@@ -26,4 +26,13 @@ export class FanclubService {
   addFanClub(fanClub: FanClub): Observable<void> {
     return this.http.post<void>(`${this.myAppUrl}${this.myApiUrl}`, fanClub);
   }
+  getFanClub(id: number): Observable<FanClub> {
+    return this.http.get<FanClub>(`${this.myAppUrl}${this.myApiUrl}${id}`);
+  }
+  updateFanClub(id: number, fanClub: FanClub): Observable<void> {
+    return this.http.put<void>(
+      `${this.myAppUrl}${this.myApiUrl}${id}`,
+      fanClub
+    );
+  }
 }
