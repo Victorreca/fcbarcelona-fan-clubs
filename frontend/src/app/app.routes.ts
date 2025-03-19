@@ -9,7 +9,6 @@ export const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'add', component: AddEditFanclubComponent },
   { path: 'edit/:id', component: AddEditFanclubComponent },
-  { path: 'download', component: AddEditFanclubComponent },
   { path: 'mapa', component: MapComponent },
   { path: 'calendar', component: CalendarComponent },
   { path: 'charts', component: ChartsComponent },

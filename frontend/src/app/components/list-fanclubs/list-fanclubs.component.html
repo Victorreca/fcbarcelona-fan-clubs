@@ -17,9 +17,6 @@
           Localización
         </th>
         <th scope="col" class="px-6 py-3">
-          Enlace google Maps
-        </th>
-        <th scope="col" class="px-6 py-3">
           Año fundación
         </th>
         <th scope="col" class="px-6 py-3">
@@ -46,11 +43,6 @@
           {{fanclub.location}}
         </td>
         <td class="px-6 py-4">
-          @if(fanclub.latitude && fanclub.longitude){
-          {{fanclub.latitude}}+{{fanclub.longitude}}
-          }
-        </td>
-        <td class="px-6 py-4">
           {{fanclub.foundedYear}}
         </td>
         <td class="px-6 py-4">
@@ -59,13 +51,11 @@
         @if(fanclub.event){
         <td class="px-6 py-4">
           <ul>
-            <!-- @for(event of fanclub.events; track event.id){ -->
             <li>
               <strong>{{ fanclub.event.name }}</strong> - {{ fanclub.event.date | date:'dd/MM/yyyy'}} - {{
               fanclub.event.time}} ({{
               fanclub.event.location }})
             </li>
-            <!-- } -->
           </ul>
         </td>
         } @else {
@@ -93,7 +83,7 @@
 
   <div class="px-6 py-4 flex flex-nowrap gap-2">
     @if(listFanclubs.length > 0){
-    <a routerLink='/download' type="button"
+    <a (click)="downloadFanClubs()" type="button"
       class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none cursor-pointer">Descargar</a>
     }
     <a routerLink='/add' type="button"
