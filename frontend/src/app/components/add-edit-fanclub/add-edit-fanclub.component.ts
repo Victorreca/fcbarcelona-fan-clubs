@@ -118,7 +118,10 @@ export class AddEditFanclubComponent implements OnInit {
       }
     } else {
       this.errorMessage = 'Por favor, completa todos los campos requeridos.';
-      this.toastr.error('No se puedo añadir la peña', 'Peña añadida');
+      this.toastr.error(
+        'No se puedo añadir la peña',
+        'No se pudo añadir la peña'
+      );
     }
   }
 }
