@@ -4,6 +4,7 @@ const express_1 = require("express");
 const fanClub_1 = require("../controllers/fanClub");
 const fanClub_2 = require("../controllers/fanClub");
 const router = (0, express_1.Router)();
+router.get("/download", fanClub_1.downloadFanClubs);
 router.get("/", fanClub_1.getFansClub);
 router.get("/:id", fanClub_2.getFanClub);
 router.delete("/:id", fanClub_1.deleteFanClub);

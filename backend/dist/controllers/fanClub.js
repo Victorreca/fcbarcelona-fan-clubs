@@ -12,8 +12,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateFanClub = exports.addFanClub = exports.deleteFanClub = exports.getFanClub = exports.getFansClub = void 0;
+exports.downloadFanClubs = exports.updateFanClub = exports.addFanClub = exports.deleteFanClub = exports.getFanClub = exports.getFansClub = void 0;
 const fanClub_1 = __importDefault(require("../models/fanClub"));
+const json2csv_1 = require("json2csv");
 const getFansClub = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const listFanClubs = yield fanClub_1.default.findAll();
     listFanClubs
@@ -80,3 +81,33 @@ const updateFanClub = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     }
 });
 exports.updateFanClub = updateFanClub;
+const downloadFanClubs = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const fanClubs = yield fanClub_1.default.findAll();
+        if (!fanClubs.length) {
+            res.status(404).json({ msg: "No hay peñas Blaugrana disponibles" });
+            return;
+        }
+        const fields = [
+            "id",
+            "name",
+            "location",
+            "latitude",
+            "longitude",
+            "foundedYear",
+            "membersCount",
+        ];
+        const json2csvParser = new json2csv_1.Parser({ fields });
+        let csvData = json2csvParser.parse(fanClubs);
+        const bom = "\uFEFF";
+        csvData = bom + csvData;
+        res.header("Content-Type", "text/csv; charset=utf-8");
+        res.attachment("fanclubs.csv");
+        res.send(csvData);
+    }
+    catch (error) {
+        console.error("Error al generar CSV:", error);
+        res.status(500).json({ msg: "Error al generar la descarga" });
+    }
+});
+exports.downloadFanClubs = downloadFanClubs;
