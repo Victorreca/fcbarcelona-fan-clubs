@@ -10,7 +10,7 @@ export const routes: Routes = [
   { path: 'add', component: AddEditFanclubComponent },
   { path: 'edit/:id', component: AddEditFanclubComponent },
   { path: 'download', component: AddEditFanclubComponent },
-  { path: 'map', component: MapComponent },
+  { path: 'mapa', component: MapComponent },
   { path: 'calendar', component: CalendarComponent },
   { path: 'charts', component: ChartsComponent },
   { path: '**', redirectTo: '', pathMatch: 'full' },
