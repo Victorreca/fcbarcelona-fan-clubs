@@ -1,7 +1,7 @@
 import { EventInput } from '@fullcalendar/core';
 
 let eventGuid = 0;
-const TODAY_STR = new Date().toISOString().replace(/T.*$/, ''); // YYYY-MM-DD of today
+const TODAY_STR = new Date().toISOString().replace(/T.*$/, '');
 
 export const INITIAL_EVENTS: EventInput[] = [
   {
@@ -19,7 +19,7 @@ export const INITIAL_EVENTS: EventInput[] = [
     id: createEventId(),
     title: 'Segundo evento lalala',
     start: TODAY_STR + 'T15:00:00',
-    end: TODAY_STR + 'T15:00:00',
+    end: TODAY_STR + 'T16:00:00',
   },
   {
     id: createEventId(),
@@ -30,14 +30,19 @@ export const INITIAL_EVENTS: EventInput[] = [
   {
     id: createEventId(),
     title: 'Reunión de prueba2',
-    start: '2025-03-16T09:00:00',
+    start: '2025-03-16T23:00:00',
     end: '2025-03-16T11:00:00',
   },
   {
     id: createEventId(),
-    title: 'Reunión de prueba3',
+    title: 'Reunión de prueba3 fghhghg',
     start: '2025-03-17T09:00:00',
     end: '2025-03-17T11:00:00',
+  },
+  {
+    id: createEventId(),
+    title: 'Evento para todo el día',
+    start: '2025-03-17',
   },
 ];
 

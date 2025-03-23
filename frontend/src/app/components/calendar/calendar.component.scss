@@ -47,10 +47,7 @@ b {
   max-width: 1100px;
   margin: 0 auto;
 }
-.fc-daygrid-event {
-  white-space: nowrap;
+.custom-event {
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 100%;
-  display: block;
 }
