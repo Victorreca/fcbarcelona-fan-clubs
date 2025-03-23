@@ -1,4 +1,10 @@
-import { Component, signal, ChangeDetectorRef } from '@angular/core';
+import {
+  Component,
+  signal,
+  ChangeDetectorRef,
+  inject,
+  OnInit,
+} from '@angular/core';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import {
   CalendarOptions,
@@ -10,9 +16,11 @@ import interactionPlugin from '@fullcalendar/interaction';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
-import { INITIAL_EVENTS, createEventId } from './event-utils';
+import { createEventId } from './event-utils';
 import esLocale from '@fullcalendar/core/locales/es';
 import { CommonModule } from '@angular/common';
+import { EventfanclubService } from '../../services/eventfanclub.service';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-calendar',
@@ -20,8 +28,11 @@ import { CommonModule } from '@angular/common';
   templateUrl: './calendar.component.html',
   styleUrl: './calendar.component.scss',
 })
-export class CalendarComponent {
+export class CalendarComponent implements OnInit {
+  private changeDetector = inject(ChangeDetectorRef);
+  private eventFanClubService = inject(EventfanclubService);
   calendarVisible = signal(true);
+
   calendarOptions = signal<CalendarOptions>({
     plugins: [interactionPlugin, dayGridPlugin, timeGridPlugin, listPlugin],
     headerToolbar: {
@@ -36,7 +47,9 @@ export class CalendarComponent {
       return args.text.charAt(0).toUpperCase() + args.text.slice(1);
     },
     locale: esLocale,
-    initialEvents: INITIAL_EVENTS, // alternatively, use the `events` setting to fetch from a feed
+    events: [],
+    // initialEvents: INITIAL_EVENTS,
+    // alternatively, use the `events` setting to fetch from a feed
     weekends: true,
     editable: true,
     selectable: true,
@@ -53,7 +66,35 @@ export class CalendarComponent {
   });
   currentEvents = signal<EventApi[]>([]);
 
-  constructor(private changeDetector: ChangeDetectorRef) {}
+  constructor() {}
+  async ngOnInit() {
+    await this.loadEvents();
+  }
+
+  async loadEvents() {
+    const fanclubId = 1;
+
+    try {
+      const events = await firstValueFrom(
+        this.eventFanClubService.getFanClubEvents(fanclubId)
+      );
+
+      this.calendarOptions.update((options) => ({
+        ...options,
+        events: events.map((event) => ({
+          id: event.id,
+          title: event.name,
+          start: `${event.date}T${event.time}`,
+          end: `${event.date}T${event.time}`,
+          allDay: false,
+        })),
+      }));
+
+      this.changeDetector.detectChanges();
+    } catch (error) {
+      console.error('Error al cargar eventos:', error);
+    }
+  }
 
   handleCalendarToggle() {
     this.calendarVisible.update((bool) => !bool);
@@ -70,7 +111,7 @@ export class CalendarComponent {
     const title = prompt('Please enter a new title for your event');
     const calendarApi = selectInfo.view.calendar;
 
-    calendarApi.unselect(); // clear date selection
+    calendarApi.unselect();
 
     if (title) {
       calendarApi.addEvent({
@@ -95,6 +136,6 @@ export class CalendarComponent {
 
   handleEvents(events: EventApi[]) {
     this.currentEvents.set(events);
-    this.changeDetector.detectChanges(); // workaround for pressionChangedAfterItHasBeenCheckedError
+    this.changeDetector.detectChanges();
   }
 }
