@@ -48,14 +48,15 @@
         <td class="px-6 py-4">
           {{fanclub.membersCount}}
         </td>
-        @if(fanclub.event){
+        @if(fanclub.events.length){
         <td class="px-6 py-4">
           <ul>
+            @for(event of fanclub.events; track event.id){
             <li>
-              <strong>{{ fanclub.event.name }}</strong> - {{ fanclub.event.date | date:'dd/MM/yyyy'}} - {{
-              fanclub.event.time}} ({{
-              fanclub.event.location }})
+              <strong>{{ event.name }}</strong> - {{ event.date | date:'dd/MM/yyyy'}} - {{event.time}} ({{event.location
+              }})
             </li>
+            }
           </ul>
         </td>
         } @else {
