@@ -1,9 +1,9 @@
 import FanClub from "./fanClub";
 import EventClub from "./eventClub";
 
-FanClub.hasOne(EventClub, {
+FanClub.hasMany(EventClub, {
   foreignKey: "fanclub_id",
-  as: "event",
+  as: "events",
 });
 
 EventClub.belongsTo(FanClub, {

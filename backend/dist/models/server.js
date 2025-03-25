@@ -15,7 +15,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const fanClub_1 = __importDefault(require("../routes/fanClub"));
+const eventClub_1 = __importDefault(require("../routes/eventClub"));
 const connection_1 = __importDefault(require("../db/connection"));
+require("../models/associations");
 class Server {
     constructor() {
         this.app = (0, express_1.default)();
@@ -35,6 +37,7 @@ class Server {
             res.json({ msg: "API working" });
         });
         this.app.use("/api/fan-club", fanClub_1.default);
+        this.app.use("/api/events", eventClub_1.default);
     }
     middlewares() {
         this.app.use(express_1.default.json());

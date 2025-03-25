@@ -14,20 +14,38 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.downloadFanClubs = exports.updateFanClub = exports.addFanClub = exports.deleteFanClub = exports.getFanClub = exports.getFansClub = void 0;
 const fanClub_1 = __importDefault(require("../models/fanClub"));
+const eventClub_1 = __importDefault(require("../models/eventClub"));
 const json2csv_1 = require("json2csv");
+require("../models/associations");
 const getFansClub = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const listFanClubs = yield fanClub_1.default.findAll();
-    listFanClubs
-        ? res.json(listFanClubs)
-        : res.status(404).json({ msg: `No fan clubs` });
+    try {
+        const listFanClubs = yield fanClub_1.default.findAll({
+            include: [{ model: eventClub_1.default, as: "events" }],
+        });
+        listFanClubs
+            ? res.json(listFanClubs)
+            : res.status(404).json({ msg: `No fan clubs` });
+    }
+    catch (error) {
+        console.error("Error fetching fan clubs:", error);
+        res.status(500).json({ msg: "Error fetching fan clubs", error });
+    }
 });
 exports.getFansClub = getFansClub;
 const getFanClub = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    const fanClub = yield fanClub_1.default.findByPk(id);
-    fanClub
-        ? res.json(fanClub)
-        : res.status(404).json({ msg: `Fan club with id ${id} not found` });
+    try {
+        const fanClub = yield fanClub_1.default.findByPk(id, {
+            include: [{ model: eventClub_1.default, as: "events" }],
+        });
+        fanClub
+            ? res.json(fanClub)
+            : res.status(404).json({ msg: `Fan club with id ${id} not found` });
+    }
+    catch (error) {
+        console.error("Error fetching fan club:", error);
+        res.status(500).json({ msg: "Error fetching fan club", error });
+    }
 });
 exports.getFanClub = getFanClub;
 const deleteFanClub = (req, res) => __awaiter(void 0, void 0, void 0, function* () {

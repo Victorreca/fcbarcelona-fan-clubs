@@ -5,7 +5,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_1 = require("sequelize");
 const connection_1 = __importDefault(require("../db/connection"));
-const fanClub_1 = __importDefault(require("./fanClub")); // Importamos FanClub para la relación
 const EventClub = connection_1.default.define("eventclubs", {
     id: {
         type: sequelize_1.DataTypes.INTEGER,
@@ -17,7 +16,7 @@ const EventClub = connection_1.default.define("eventclubs", {
         type: sequelize_1.DataTypes.INTEGER,
         allowNull: false,
         references: {
-            model: fanClub_1.default,
+            model: "fansclubs",
             key: "id",
         },
         onUpdate: "CASCADE",
@@ -39,5 +38,7 @@ const EventClub = connection_1.default.define("eventclubs", {
         type: sequelize_1.DataTypes.STRING(100),
         allowNull: false,
     },
+}, {
+    timestamps: false,
 });
 exports.default = EventClub;

@@ -40,8 +40,7 @@ const FanClub = db.define(
     },
   },
   {
-    createdAt: false,
-    updatedAt: false,
+    timestamps: false,
   }
 );
 
