@@ -82,7 +82,7 @@ export class CalendarComponent implements OnInit {
       this.calendarOptions.update((options) => ({
         ...options,
         events: events.map((event) => ({
-          id: event.id,
+          id: event.id ? event.id.toString() : createEventId(),
           title: event.name,
           start: `${event.date}T${event.time}`,
           end: `${event.date}T${event.time}`,

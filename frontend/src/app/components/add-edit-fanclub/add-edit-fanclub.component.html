@@ -14,7 +14,7 @@
         placeholder="Nombre">
       @if(addClubForm.get('clubName')?.invalid && addClubForm.get('clubName')?.touched){
       <p class="text-red-500 text-sm">
-        Indica el nobmre de la peña.
+        Indica el nombre de la peña.
       </p>
       }
     </div>
@@ -67,7 +67,7 @@
 
     <div formGroupName="eventClub">
       <div>
-        <label for="eventName" class="block mb-2 text-sm font-medium text-gray-900">Nombre del evento (opcional)</label>
+        <label for="eventName" class="block mb-2 text-sm font-medium text-gray-900">Añadir evento (opcional)</label>
         <input type="text" formControlName="name" id="eventName"
           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
           placeholder="Nombre del evento">
@@ -78,12 +78,18 @@
         <label for="eventDate" class="block mb-2 text-sm font-medium text-gray-900">Fecha del evento</label>
         <input type="date" formControlName="date" id="eventDate"
           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+        @if (addClubForm.get('eventClub.date')?.invalid && addClubForm.get('eventClub.date')?.touched) {
+        <p class="text-red-500 text-sm">La fecha del evento es obligatoria.</p>
+        }
       </div>
 
       <div>
         <label for="eventTime" class="block mb-2 text-sm font-medium text-gray-900">Hora de inicio del evento</label>
         <input type="time" formControlName="time" id="eventTime"
           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+        @if (addClubForm.get('eventClub.time')?.invalid && addClubForm.get('eventClub.time')?.touched) {
+        <p class="text-red-500 text-sm">La hora del evento es obligatoria.</p>
+        }
       </div>
 
       <div>
@@ -91,6 +97,9 @@
         <input type="text" formControlName="location" id="eventLocation"
           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
           placeholder="Ubicación del evento">
+        @if (addClubForm.get('eventClub.location')?.invalid && addClubForm.get('eventClub.location')?.touched) {
+        <p class="text-red-500 text-sm">La ubicación del evento es obligatoria.</p>
+        }
       </div>
       }
     </div>

@@ -1,6 +1,6 @@
 export interface FanClubEvent {
-  id: string;
-  fanclub_id: string;
+  id?: number;
+  fanclub_id: number;
   name: string;
   date: string;
   time: string;

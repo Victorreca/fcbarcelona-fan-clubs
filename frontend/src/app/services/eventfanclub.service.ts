@@ -22,11 +22,16 @@ export class EventfanclubService {
       `${this.myAppUrl}${this.myApiUrl}?fanclub_id=${fanclub_id}`
     );
   }
-  // addEvent(event: FanClubEvent): Observable<void> {
-  //   return this.http.post<void>(`${this.myAppUrl}${this.myApiUrl}`, event);
-  // }
-
-  // deleteEvent(eventId: string): Observable<void> {
-  //   return this.http.delete<void>(`${this.myAppUrl}${this.myApiUrl}${eventId}`);
-  // }
+  addFanClubEvent(fanClubEvent: FanClubEvent): Observable<void> {
+    return this.http.post<void>(
+      `${this.myAppUrl}${this.myApiUrl}`,
+      fanClubEvent
+    );
+  }
+  updateFanClubEvent(id: number, fanClubEvent: FanClubEvent): Observable<void> {
+    return this.http.put<void>(
+      `${this.myAppUrl}${this.myApiUrl}${id}`,
+      fanClubEvent
+    );
+  }
 }
