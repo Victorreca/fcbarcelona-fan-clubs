@@ -19,7 +19,10 @@ export const getFansClub = async (req: Request, res: Response) => {
   }
 };
 
-export const getFanClub = async (req: Request, res: Response) => {
+export const getFanClub = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   const { id } = req.params;
   try {
     const fanClub = await FanClub.findByPk(id, {
@@ -50,16 +53,14 @@ export const deleteFanClub = async (req: Request, res: Response) => {
 export const addFanClub = async (req: Request, res: Response) => {
   const { body } = req;
   try {
-    await FanClub.create(body);
+    const newFanClub = await FanClub.create(body);
 
-    res.json({
-      msg: "Add Fan club",
-    });
+    console.log("✅ Peña creada:", newFanClub.toJSON());
+    res.status(201).json(newFanClub);
   } catch (error) {
     console.log(error);
-    res.json({
-      msg: "Ups something went wrong",
-    });
+    console.log("❌ Error al crear la peña:", error);
+    res.status(500).json({ msg: "Something went wrong" });
   }
 };
 
@@ -71,7 +72,7 @@ export const updateFanClub = async (req: Request, res: Response) => {
     const fanClub = await FanClub.findByPk(id);
 
     if (fanClub) {
-      await fanClub?.update(body);
+      await fanClub.update(body);
       res.json({
         msg: `Update Fan club with id ${id}`,
       });
@@ -80,9 +81,7 @@ export const updateFanClub = async (req: Request, res: Response) => {
     }
   } catch (error) {
     console.log(error);
-    res.json({
-      msg: "Ups something went wrong",
-    });
+    res.status(500).json({ msg: "Error updating Fan Club" });
   }
 };
 

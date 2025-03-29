@@ -63,16 +63,14 @@ exports.deleteFanClub = deleteFanClub;
 const addFanClub = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { body } = req;
     try {
-        yield fanClub_1.default.create(body);
-        res.json({
-            msg: "Add Fan club",
-        });
+        const newFanClub = yield fanClub_1.default.create(body);
+        console.log("✅ Peña creada:", newFanClub.toJSON());
+        res.status(201).json(newFanClub);
     }
     catch (error) {
         console.log(error);
-        res.json({
-            msg: "Ups something went wrong",
-        });
+        console.log("❌ Error al crear la peña:", error);
+        res.status(500).json({ msg: "Something went wrong" });
     }
 });
 exports.addFanClub = addFanClub;
@@ -82,7 +80,7 @@ const updateFanClub = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     try {
         const fanClub = yield fanClub_1.default.findByPk(id);
         if (fanClub) {
-            yield (fanClub === null || fanClub === void 0 ? void 0 : fanClub.update(body));
+            yield fanClub.update(body);
             res.json({
                 msg: `Update Fan club with id ${id}`,
             });
@@ -93,9 +91,7 @@ const updateFanClub = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     }
     catch (error) {
         console.log(error);
-        res.json({
-            msg: "Ups something went wrong",
-        });
+        res.status(500).json({ msg: "Error updating Fan Club" });
     }
 });
 exports.updateFanClub = updateFanClub;
