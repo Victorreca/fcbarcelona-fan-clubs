@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateEventFanClub = exports.createEvent = exports.getEventById = exports.getEvents = void 0;
+exports.deleteEventFanClub = exports.updateEventFanClub = exports.createEvent = exports.getEventById = exports.getEvents = void 0;
 const eventClub_1 = __importDefault(require("../models/eventClub"));
 const getEvents = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -80,3 +80,20 @@ const updateEventFanClub = (req, res) => __awaiter(void 0, void 0, void 0, funct
     }
 });
 exports.updateEventFanClub = updateEventFanClub;
+const deleteEventFanClub = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const eventFanClub = yield eventClub_1.default.findByPk(id);
+    try {
+        if (eventFanClub) {
+            yield eventFanClub.destroy();
+            res.json({ msg: `Event fan club with id ${id} deleted` });
+        }
+        else {
+            res.status(404).json({ msg: `Event fan club with id ${id} not found` });
+        }
+    }
+    catch (error) {
+        res.status(500).json({ msg: "Error deleting event", error });
+    }
+});
+exports.deleteEventFanClub = deleteEventFanClub;

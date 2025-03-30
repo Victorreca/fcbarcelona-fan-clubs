@@ -72,3 +72,19 @@ export const updateEventFanClub = async (req: Request, res: Response) => {
     res.status(500).json({ msg: "Error updating event of Fan Club" });
   }
 };
+
+export const deleteEventFanClub = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const eventFanClub = await EventClub.findByPk(id);
+
+  try {
+    if (eventFanClub) {
+      await eventFanClub.destroy();
+      res.json({ msg: `Event fan club with id ${id} deleted` });
+    } else {
+      res.status(404).json({ msg: `Event fan club with id ${id} not found` });
+    }
+  } catch (error) {
+    res.status(500).json({ msg: "Error deleting event", error });
+  }
+};

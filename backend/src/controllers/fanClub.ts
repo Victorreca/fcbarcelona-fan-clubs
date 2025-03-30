@@ -42,11 +42,15 @@ export const deleteFanClub = async (req: Request, res: Response) => {
   const { id } = req.params;
   const fanClub = await FanClub.findByPk(id);
 
-  if (fanClub) {
-    await fanClub.destroy();
-    res.json({ msg: `Fan club with id ${id} deleted` });
-  } else {
-    res.status(404).json({ msg: `Fan club with id ${id} not found` });
+  try {
+    if (fanClub) {
+      await fanClub.destroy();
+      res.json({ msg: `Fan club with id ${id} deleted` });
+    } else {
+      res.status(404).json({ msg: `Fan club with id ${id} not found` });
+    }
+  } catch (error) {
+    res.status(500).json({ msg: "Error deleting fanclub", error });
   }
 };
 

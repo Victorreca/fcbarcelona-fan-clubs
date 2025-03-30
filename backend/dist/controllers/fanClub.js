@@ -51,12 +51,17 @@ exports.getFanClub = getFanClub;
 const deleteFanClub = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     const fanClub = yield fanClub_1.default.findByPk(id);
-    if (fanClub) {
-        yield fanClub.destroy();
-        res.json({ msg: `Fan club with id ${id} deleted` });
+    try {
+        if (fanClub) {
+            yield fanClub.destroy();
+            res.json({ msg: `Fan club with id ${id} deleted` });
+        }
+        else {
+            res.status(404).json({ msg: `Fan club with id ${id} not found` });
+        }
     }
-    else {
-        res.status(404).json({ msg: `Fan club with id ${id} not found` });
+    catch (error) {
+        res.status(500).json({ msg: "Error deleting fanclub", error });
     }
 });
 exports.deleteFanClub = deleteFanClub;
