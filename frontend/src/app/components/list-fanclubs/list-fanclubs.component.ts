@@ -38,6 +38,7 @@ export class ListFanclubsComponent implements OnInit {
       this.getListFanClubs();
     });
     this.toastr.warning('Peña eliminada con éxito', 'Peña eliminada');
+    this.loading = false;
   }
 
   downloadFanClubs() {

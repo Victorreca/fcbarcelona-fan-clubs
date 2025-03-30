@@ -89,6 +89,35 @@ export class AddEditFanclubComponent implements OnInit {
     });
   }
 
+  getFanClubEvents() {
+    if (!this.fanClubId) return;
+
+    this.loading = true;
+    this.eventFanClubService.getFanClubEvents(this.fanClubId).subscribe({
+      next: (events: FanClubEvent[]) => {
+        this.loading = false;
+
+        if (events.length > 0) {
+          const event = events[0];
+          this.addClubForm.patchValue({
+            eventClub: {
+              id: event.id,
+              name: event.name,
+              date: event.date,
+              time: event.time,
+              location: event.location,
+            },
+          });
+        }
+      },
+      error: (err) => {
+        this.loading = false;
+        console.error('❌ Error al obtener eventos del fan club:', err);
+        this.toastr.error('No se pudieron cargar los eventos', 'Error');
+      },
+    });
+  }
+
   getFanClub(id: number) {
     this.loading = true;
     this.fanClubService.getFanClub(id).subscribe((data: FanClub) => {
@@ -175,7 +204,7 @@ export class AddEditFanclubComponent implements OnInit {
                     });
                 }
               }
-
+              this.getFanClubEvents();
               this.loading = false;
               this.toastr.success(
                 'Peña actualizada con éxito',
@@ -229,6 +258,36 @@ export class AddEditFanclubComponent implements OnInit {
       this.errorMessage = 'Por favor, completa todos los campos requeridos.';
       this.toastr.error('No se pudo añadir la peña', 'Error al crear la peña');
     }
+  }
+
+  deleteEventFanClub(id: number) {
+    this.loading = true;
+
+    this.eventFanClubService.deleteEventFanClubEvent(id).subscribe({
+      next: () => {
+        this.toastr.warning('Evento eliminado con éxito', 'Evento eliminado');
+
+        this.getFanClubEvents();
+
+        this.addClubForm.patchValue({
+          eventClub: {
+            id: null,
+            name: '',
+            date: '',
+            time: '',
+            location: '',
+          },
+        });
+
+        this.loading = false;
+        this.router.navigate([], { relativeTo: this.activateRoute });
+      },
+      error: (err) => {
+        console.error('❌ Error al eliminar el evento:', err);
+        this.toastr.error('No se pudo eliminar el evento', 'Error');
+        this.loading = false;
+      },
+    });
   }
 
   goBack() {

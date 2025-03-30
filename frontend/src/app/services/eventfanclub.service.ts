@@ -34,4 +34,7 @@ export class EventfanclubService {
       fanClubEvent
     );
   }
+  deleteEventFanClubEvent(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.myAppUrl}${this.myApiUrl}${id}`);
+  }
 }

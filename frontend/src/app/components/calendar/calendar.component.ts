@@ -21,6 +21,7 @@ import esLocale from '@fullcalendar/core/locales/es';
 import { CommonModule } from '@angular/common';
 import { EventfanclubService } from '../../services/eventfanclub.service';
 import { firstValueFrom } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-calendar',
@@ -31,6 +32,7 @@ import { firstValueFrom } from 'rxjs';
 export class CalendarComponent implements OnInit {
   private changeDetector = inject(ChangeDetectorRef);
   private eventFanClubService = inject(EventfanclubService);
+  private toastr = inject(ToastrService);
   calendarVisible = signal(true);
 
   calendarOptions = signal<CalendarOptions>({
@@ -48,8 +50,6 @@ export class CalendarComponent implements OnInit {
     },
     locale: esLocale,
     events: [],
-    // initialEvents: INITIAL_EVENTS,
-    // alternatively, use the `events` setting to fetch from a feed
     weekends: true,
     editable: true,
     selectable: true,
@@ -125,12 +125,26 @@ export class CalendarComponent implements OnInit {
   }
 
   handleEventClick(clickInfo: EventClickArg) {
+    console.log(clickInfo);
+    const eventId = Number(clickInfo.event.id);
     if (
       confirm(
-        `Are you sure you want to delete the event '${clickInfo.event.title}'`
+        `¿Estás seguro de que quieres eliminar el evento "${clickInfo.event.title}"`
       )
     ) {
-      clickInfo.event.remove();
+      this.eventFanClubService.deleteEventFanClubEvent(eventId).subscribe({
+        next: () => {
+          clickInfo.event.remove();
+          this.toastr.success('Evento eliminado con éxito', 'Evento eliminado');
+          this.currentEvents.set(
+            this.currentEvents().filter((event) => Number(event.id) !== eventId)
+          );
+        },
+        error: (err) => {
+          console.error('Error al eliminar el evento:', err);
+          this.toastr.error('No se pudo eliminar el evento', 'Error');
+        },
+      });
     }
   }
 
