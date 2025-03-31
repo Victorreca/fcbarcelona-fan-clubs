@@ -138,7 +138,6 @@ export class CalendarComponent implements OnInit {
       time: event.start?.toTimeString().split(' ')[0] || '',
       location: event.extendedProps['location'] || 'Sin ubicación',
     });
-    // clickInfo.event.remove();
   }
 
   handleEvents(events: EventApi[]) {

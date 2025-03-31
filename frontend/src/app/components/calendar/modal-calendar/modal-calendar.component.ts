@@ -2,12 +2,17 @@ import { Component, inject, OnInit } from '@angular/core';
 import { ModalStateService } from '../../../services/modal-state.service';
 import { EventfanclubService } from '../../../services/eventfanclub.service';
 import { ToastrService } from 'ngx-toastr';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { FanClubEvent } from '../../../interfaces/fanClubEvent';
 
 @Component({
   selector: 'app-modal-calendar',
-  imports: [],
+  imports: [ReactiveFormsModule],
   templateUrl: './modal-calendar.component.html',
   styleUrl: './modal-calendar.component.scss',
 })
@@ -19,6 +24,7 @@ export class ModalCalendarComponent implements OnInit {
   isModalOpen = this.modalStateService.isModalOpen;
   selectedEvent = this.modalStateService.selectedEvent;
   updateEventForm!: FormGroup;
+  isEditing = false;
 
   ngOnInit(): void {
     this.initForm();
@@ -46,7 +52,15 @@ export class ModalCalendarComponent implements OnInit {
     }
   }
 
+  toggleEdit() {
+    this.isEditing = !this.isEditing;
+    if (this.isEditing) {
+      this.populateForm();
+    }
+  }
+
   closeModal() {
+    this.isEditing = false;
     this.modalStateService.closeModal();
   }
 
@@ -77,6 +91,9 @@ export class ModalCalendarComponent implements OnInit {
         next: () => {
           this.toastr.success('Evento actualizado con éxito.', 'Éxito');
           this.closeModal();
+          setTimeout(() => {
+            location.reload();
+          }, 1000);
         },
         error: (err) => {
           this.toastr.error('Error al actualizar el evento.', 'Error');
@@ -92,7 +109,9 @@ export class ModalCalendarComponent implements OnInit {
         next: () => {
           this.toastr.success('Evento eliminado con éxito', 'Evento eliminado');
           this.closeModal();
-          location.reload();
+          setTimeout(() => {
+            location.reload();
+          }, 1000);
         },
         error: (err) => {
           this.toastr.error('Error al eliminar el evento.', 'Error');
