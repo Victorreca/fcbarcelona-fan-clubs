@@ -7,6 +7,7 @@ export class ModalStateService {
   isModalOpen = signal(false);
   selectedEvent = signal<{
     id: number;
+    fanclub_id: number;
     title: string;
     date: string;
     time: string;
@@ -15,6 +16,7 @@ export class ModalStateService {
 
   openModal(event: {
     id: number;
+    fanclub_id: number;
     title: string;
     date: string;
     time: string;

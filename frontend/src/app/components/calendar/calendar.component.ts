@@ -21,7 +21,6 @@ import esLocale from '@fullcalendar/core/locales/es';
 import { CommonModule } from '@angular/common';
 import { EventfanclubService } from '../../services/eventfanclub.service';
 import { firstValueFrom } from 'rxjs';
-import { ToastrService } from 'ngx-toastr';
 import { ModalStateService } from '../../services/modal-state.service';
 import { ModalCalendarComponent } from './modal-calendar/modal-calendar.component';
 
@@ -34,7 +33,6 @@ import { ModalCalendarComponent } from './modal-calendar/modal-calendar.componen
 export class CalendarComponent implements OnInit {
   private changeDetector = inject(ChangeDetectorRef);
   private eventFanClubService = inject(EventfanclubService);
-  private toastr = inject(ToastrService);
   private modalStateService = inject(ModalStateService);
   calendarVisible = signal(true);
   isModalOpen = this.modalStateService.isModalOpen;
@@ -63,11 +61,6 @@ export class CalendarComponent implements OnInit {
     select: this.handleDateSelect.bind(this),
     eventClick: this.handleEventClick.bind(this),
     eventsSet: this.handleEvents.bind(this),
-    /* you can update a remote database when these fire:
-    eventAdd:
-    eventChange:
-    eventRemove:
-    */
   });
   currentEvents = signal<EventApi[]>([]);
 
@@ -93,6 +86,7 @@ export class CalendarComponent implements OnInit {
           end: `${event.date}T${event.time}`,
           allDay: false,
           extendedProps: {
+            fanclub_id: event.fanclub_id,
             date: event.date,
             time: event.time,
             location: event.location || 'Sin ubicación',
@@ -138,33 +132,13 @@ export class CalendarComponent implements OnInit {
     const event = clickInfo.event;
     this.modalStateService.openModal({
       id: Number(event.id),
+      fanclub_id: event.extendedProps['fanclub_id'],
       title: event.title,
       date: event.start?.toISOString().split('T')[0] || '',
       time: event.start?.toTimeString().split(' ')[0] || '',
       location: event.extendedProps['location'] || 'Sin ubicación',
     });
-
-    // const eventId = Number(clickInfo.event.id);
-
-    // if (
-    //   confirm(
-    //     `¿Estás seguro de que quieres eliminar el evento "${clickInfo.event.title}"`
-    //   )
-    // ) {
-    //   this.eventFanClubService.deleteEventFanClubEvent(eventId).subscribe({
-    //     next: () => {
-    //       clickInfo.event.remove();
-    //       this.toastr.success('Evento eliminado con éxito', 'Evento eliminado');
-    //       this.currentEvents.set(
-    //         this.currentEvents().filter((event) => Number(event.id) !== eventId)
-    //       );
-    //     },
-    //     error: (err) => {
-    //       console.error('Error al eliminar el evento:', err);
-    //       this.toastr.error('No se pudo eliminar el evento', 'Error');
-    //     },
-    //   });
-    // }
+    // clickInfo.event.remove();
   }
 
   handleEvents(events: EventApi[]) {
