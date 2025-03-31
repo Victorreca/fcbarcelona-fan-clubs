@@ -22,10 +22,12 @@ import { CommonModule } from '@angular/common';
 import { EventfanclubService } from '../../services/eventfanclub.service';
 import { firstValueFrom } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
+import { ModalStateService } from '../../services/modal-state.service';
+import { ModalCalendarComponent } from './modal-calendar/modal-calendar.component';
 
 @Component({
   selector: 'app-calendar',
-  imports: [FullCalendarModule, CommonModule],
+  imports: [FullCalendarModule, CommonModule, ModalCalendarComponent],
   templateUrl: './calendar.component.html',
   styleUrl: './calendar.component.scss',
 })
@@ -33,7 +35,10 @@ export class CalendarComponent implements OnInit {
   private changeDetector = inject(ChangeDetectorRef);
   private eventFanClubService = inject(EventfanclubService);
   private toastr = inject(ToastrService);
+  private modalStateService = inject(ModalStateService);
   calendarVisible = signal(true);
+  isModalOpen = this.modalStateService.isModalOpen;
+  selectedEvent = this.modalStateService.selectedEvent;
 
   calendarOptions = signal<CalendarOptions>({
     plugins: [interactionPlugin, dayGridPlugin, timeGridPlugin, listPlugin],
@@ -87,6 +92,11 @@ export class CalendarComponent implements OnInit {
           start: `${event.date}T${event.time}`,
           end: `${event.date}T${event.time}`,
           allDay: false,
+          extendedProps: {
+            date: event.date,
+            time: event.time,
+            location: event.location || 'Sin ubicación',
+          },
         })),
       }));
 
@@ -108,7 +118,7 @@ export class CalendarComponent implements OnInit {
   }
 
   handleDateSelect(selectInfo: DateSelectArg) {
-    const title = prompt('Please enter a new title for your event');
+    const title = prompt('Introduzca un nuevo título para su evento');
     const calendarApi = selectInfo.view.calendar;
 
     calendarApi.unselect();
@@ -125,27 +135,36 @@ export class CalendarComponent implements OnInit {
   }
 
   handleEventClick(clickInfo: EventClickArg) {
-    console.log(clickInfo);
-    const eventId = Number(clickInfo.event.id);
-    if (
-      confirm(
-        `¿Estás seguro de que quieres eliminar el evento "${clickInfo.event.title}"`
-      )
-    ) {
-      this.eventFanClubService.deleteEventFanClubEvent(eventId).subscribe({
-        next: () => {
-          clickInfo.event.remove();
-          this.toastr.success('Evento eliminado con éxito', 'Evento eliminado');
-          this.currentEvents.set(
-            this.currentEvents().filter((event) => Number(event.id) !== eventId)
-          );
-        },
-        error: (err) => {
-          console.error('Error al eliminar el evento:', err);
-          this.toastr.error('No se pudo eliminar el evento', 'Error');
-        },
-      });
-    }
+    const event = clickInfo.event;
+    this.modalStateService.openModal({
+      id: Number(event.id),
+      title: event.title,
+      date: event.start?.toISOString().split('T')[0] || '',
+      time: event.start?.toTimeString().split(' ')[0] || '',
+      location: event.extendedProps['location'] || 'Sin ubicación',
+    });
+
+    // const eventId = Number(clickInfo.event.id);
+
+    // if (
+    //   confirm(
+    //     `¿Estás seguro de que quieres eliminar el evento "${clickInfo.event.title}"`
+    //   )
+    // ) {
+    //   this.eventFanClubService.deleteEventFanClubEvent(eventId).subscribe({
+    //     next: () => {
+    //       clickInfo.event.remove();
+    //       this.toastr.success('Evento eliminado con éxito', 'Evento eliminado');
+    //       this.currentEvents.set(
+    //         this.currentEvents().filter((event) => Number(event.id) !== eventId)
+    //       );
+    //     },
+    //     error: (err) => {
+    //       console.error('Error al eliminar el evento:', err);
+    //       this.toastr.error('No se pudo eliminar el evento', 'Error');
+    //     },
+    //   });
+    // }
   }
 
   handleEvents(events: EventApi[]) {
