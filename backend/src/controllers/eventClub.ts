@@ -1,9 +1,20 @@
 import { Request, Response } from "express";
 import EventClub from "../models/eventClub";
+import FanClub from "../models/fanClub";
 
 export const getEvents = async (req: Request, res: Response) => {
   try {
-    const events = await EventClub.findAll();
+    const events = await EventClub.findAll({
+      include: [
+        {
+          model: FanClub,
+          as: "fanclub",
+          attributes: ["id", "name", "location", "foundedYear"],
+          required: true,
+        },
+      ],
+    });
+
     res.json(events);
   } catch (error) {
     console.error("Error fetching events:", error);

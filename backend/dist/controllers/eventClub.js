@@ -14,9 +14,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteEventFanClub = exports.updateEventFanClub = exports.createEvent = exports.getEventById = exports.getEvents = void 0;
 const eventClub_1 = __importDefault(require("../models/eventClub"));
+const fanClub_1 = __importDefault(require("../models/fanClub"));
 const getEvents = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const events = yield eventClub_1.default.findAll();
+        const events = yield eventClub_1.default.findAll({
+            include: [
+                {
+                    model: fanClub_1.default,
+                    as: "fanclub",
+                    attributes: ["id", "name", "location", "foundedYear"],
+                    required: true,
+                },
+            ],
+        });
         res.json(events);
     }
     catch (error) {
