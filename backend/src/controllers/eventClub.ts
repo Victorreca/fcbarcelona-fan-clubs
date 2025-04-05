@@ -28,7 +28,15 @@ export const getEventById = async (
 ): Promise<void> => {
   const { id } = req.params;
   try {
-    const fanClubEvent = await EventClub.findByPk(id);
+    const fanClubEvent = await EventClub.findByPk(id, {
+      include: [
+        {
+          model: FanClub,
+          as: "fanclub",
+          attributes: ["id", "name", "location", "foundedYear"],
+        },
+      ],
+    });
 
     fanClubEvent
       ? res.json(fanClubEvent)

@@ -38,7 +38,15 @@ exports.getEvents = getEvents;
 const getEventById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     try {
-        const fanClubEvent = yield eventClub_1.default.findByPk(id);
+        const fanClubEvent = yield eventClub_1.default.findByPk(id, {
+            include: [
+                {
+                    model: fanClub_1.default,
+                    as: "fanclub",
+                    attributes: ["id", "name", "location", "foundedYear"],
+                },
+            ],
+        });
         fanClubEvent
             ? res.json(fanClubEvent)
             : res.status(404).json({ msg: `Fan club Event with id ${id} not found` });
