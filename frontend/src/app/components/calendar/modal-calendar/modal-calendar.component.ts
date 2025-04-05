@@ -9,28 +9,37 @@ import {
   Validators,
 } from '@angular/forms';
 import { FanClubEvent } from '../../../interfaces/fanClubEvent';
+import { FanclubService } from '../../../services/fanclub.service';
+import { FanClub } from '../../../interfaces/fanclub';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-modal-calendar',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './modal-calendar.component.html',
   styleUrl: './modal-calendar.component.scss',
 })
 export class ModalCalendarComponent implements OnInit {
   private modalStateService = inject(ModalStateService);
   private eventFanClubService = inject(EventfanclubService);
+  private fanClubService = inject(FanclubService);
   private toastr = inject(ToastrService);
   private fb = inject(FormBuilder);
+  fanClubs: FanClub[] = [];
   isModalOpen = this.modalStateService.isModalOpen;
   selectedEvent = this.modalStateService.selectedEvent;
   updateEventForm!: FormGroup;
-  isEditing = false;
+  newEventForm!: FormGroup;
+  isEditing = this.modalStateService.isEditing;
+  isCreating = this.modalStateService.isCreating;
 
   ngOnInit(): void {
-    this.initForm();
+    this.initUpdateForm();
+    this.initNewEventForm();
+    this.getFanClubs();
   }
 
-  initForm() {
+  initUpdateForm() {
     this.updateEventForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(3)]],
       date: ['', Validators.required],
@@ -38,6 +47,23 @@ export class ModalCalendarComponent implements OnInit {
       location: ['', Validators.required],
     });
     this.populateForm();
+  }
+
+  initNewEventForm() {
+    this.newEventForm = this.fb.group({
+      fanclub_id: [null, Validators.required],
+      name: ['', [Validators.required, Validators.minLength(3)]],
+      date: ['', Validators.required],
+      time: ['', Validators.required],
+      location: ['', Validators.required],
+    });
+  }
+
+  getFanClubs() {
+    this.fanClubService.getListFanClubs().subscribe({
+      next: (fanClubs) => (this.fanClubs = fanClubs),
+      error: (err) => console.error('Error al obtener los fan clubs:', err),
+    });
   }
 
   populateForm() {
@@ -53,14 +79,11 @@ export class ModalCalendarComponent implements OnInit {
   }
 
   toggleEdit() {
-    this.isEditing = !this.isEditing;
-    if (this.isEditing) {
-      this.populateForm();
-    }
+    this.isEditing.set(!this.isEditing());
+    this.populateForm();
   }
 
   closeModal() {
-    this.isEditing = false;
     this.modalStateService.closeModal();
   }
 
@@ -100,6 +123,34 @@ export class ModalCalendarComponent implements OnInit {
           console.error(err);
         },
       });
+  }
+
+  createEventFanClub() {
+    if (this.newEventForm.invalid) {
+      this.toastr.error('Por favor, completa todos los campos.', 'Error');
+      return;
+    }
+    const newEventFanClub: FanClubEvent = {
+      fanclub_id: this.newEventForm.value.fanclub_id,
+      name: this.newEventForm.value.name,
+      date: this.newEventForm.value.date,
+      time: this.newEventForm.value.time,
+      location: this.newEventForm.value.location,
+    };
+
+    this.eventFanClubService.addFanClubEvent(newEventFanClub).subscribe({
+      next: () => {
+        this.toastr.success('Evento creado con éxito', 'Evento nuevo');
+        this.closeModal();
+        setTimeout(() => {
+          location.reload();
+        }, 1000);
+      },
+      error: (error) => {
+        this.toastr.error('Error al crear el evento.', 'Error');
+        console.error(error);
+      },
+    });
   }
 
   deleteEventFanClub() {

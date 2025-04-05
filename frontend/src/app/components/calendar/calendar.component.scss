@@ -15,7 +15,6 @@ li {
 }
 
 b {
-  /* used for event dates/times */
   margin-right: 3px;
 }
 
@@ -43,11 +42,43 @@ b {
 }
 
 .fc {
-  /* the calendar root */
   max-width: 1100px;
   margin: 0 auto;
 }
 .custom-event {
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.fanclub-color-0 {
+  background-color: #00bcd4;
+  color: #ffffff;
+}
+.fanclub-color-1 {
+  background-color: #e91e63;
+  color: #ffffff;
+}
+.fanclub-color-2 {
+  background-color: #4caf50;
+  color: #ffffff;
+}
+.fanclub-color-3 {
+  background-color: #ff9800;
+  color: #000000;
+}
+.fanclub-color-4 {
+  background-color: #673ab7;
+  color: #ffffff;
+}
+.fanclub-color-5 {
+  background-color: #9c27b0;
+  color: #ffffff;
+}
+.fanclub-color-6 {
+  background-color: #696764;
+  color: #ffffff;
+}
+.fanclub-color-7 {
+  background-color: #24047c;
+  color: #ffffff;
 }

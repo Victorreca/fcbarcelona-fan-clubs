@@ -41,9 +41,11 @@
     @if(calendarVisible()){
     <full-calendar [options]='calendarOptions()'>
       <ng-template #eventContent let-arg>
-        <div class="custom-event">
+        <div class="custom-event w-100 p-2" [ngClass]="getFanClubColorClass(arg.event)">
           <b>{{ arg.timeText }}</b>
-          <i>{{ arg.event.title }}</i>
+          <span class="block">{{ arg.event.title }}</span>
+          <span class="block">Lugar: {{ arg.event.extendedProps.location }}</span>
+          <span>Peña: {{ arg.event.extendedProps.fanClubName }}</span>
         </div>
       </ng-template>
     </full-calendar>

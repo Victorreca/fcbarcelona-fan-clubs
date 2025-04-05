@@ -1,10 +1,4 @@
-import {
-  Component,
-  signal,
-  ChangeDetectorRef,
-  inject,
-  OnInit,
-} from '@angular/core';
+import { Component, signal, inject, OnInit } from '@angular/core';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import {
   CalendarOptions,
@@ -31,7 +25,6 @@ import { ModalCalendarComponent } from './modal-calendar/modal-calendar.componen
   styleUrl: './calendar.component.scss',
 })
 export class CalendarComponent implements OnInit {
-  private changeDetector = inject(ChangeDetectorRef);
   private eventFanClubService = inject(EventfanclubService);
   private modalStateService = inject(ModalStateService);
   calendarVisible = signal(true);
@@ -87,14 +80,15 @@ export class CalendarComponent implements OnInit {
           allDay: false,
           extendedProps: {
             fanclub_id: event.fanclub_id,
+            fanClubName: event.fanclub
+              ? event.fanclub.name
+              : 'Nombre Desconocido',
             date: event.date,
             time: event.time,
             location: event.location || 'Sin ubicación',
           },
         })),
       }));
-
-      this.changeDetector.detectChanges();
     } catch (error) {
       console.error('Error al cargar eventos:', error);
     }
@@ -112,20 +106,7 @@ export class CalendarComponent implements OnInit {
   }
 
   handleDateSelect(selectInfo: DateSelectArg) {
-    const title = prompt('Introduzca un nuevo título para su evento');
-    const calendarApi = selectInfo.view.calendar;
-
-    calendarApi.unselect();
-
-    if (title) {
-      calendarApi.addEvent({
-        id: createEventId(),
-        title,
-        start: selectInfo.startStr,
-        end: selectInfo.endStr,
-        allDay: selectInfo.allDay,
-      });
-    }
+    this.modalStateService.openCreateModal();
   }
 
   handleEventClick(clickInfo: EventClickArg) {
@@ -137,11 +118,21 @@ export class CalendarComponent implements OnInit {
       date: event.start?.toISOString().split('T')[0] || '',
       time: event.start?.toTimeString().split(' ')[0] || '',
       location: event.extendedProps['location'] || 'Sin ubicación',
+      fanClub: {
+        id: event.extendedProps['fanclub_id'],
+        name: event.extendedProps['fanClubName'] || 'Nombre Desconocido',
+      },
     });
   }
 
   handleEvents(events: EventApi[]) {
     this.currentEvents.set(events);
-    this.changeDetector.detectChanges();
+  }
+
+  getFanClubColorClass(event: any): string {
+    const numberOfColors = 8;
+    const fanclubId = event.extendedProps?.fanclub_id ?? 0;
+    const colorIndex = fanclubId % numberOfColors;
+    return `fanclub-color-${colorIndex}`;
   }
 }

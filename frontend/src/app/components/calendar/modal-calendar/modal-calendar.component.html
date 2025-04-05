@@ -4,9 +4,14 @@
     <button class="absolute top-4 right-4 text-gray-500 text-2xl cursor-pointer
  hover:text-black" (click)="closeModal()">✖</button>
 
-    @if(!isEditing){
+    @if(!isEditing() && !isCreating()){
     <div>
-      <h2 class="text-2xl font-bold mb-4">{{ selectedEvent()?.title }}</h2>
+      <h1 class="text-base mb-4">Peña Blaugrana organizadora:
+        <span class="text-2xl block">
+          {{ selectedEvent()?.fanClub?.name }}
+        </span>
+      </h1>
+      <h2 class="text-xl font-bold mb-4">{{ selectedEvent()?.title }}</h2>
       <p class="text-base mb-2"><span class="font-bold">📅 Fecha:</span> {{ selectedEvent()?.date }}</p>
       <p class="text-base mb-2"><span class="font-bold">🕒 Hora:</span> {{ selectedEvent()?.time }}</p>
       <p class="text-base mb-2"><span class="font-bold">📍 Localización:</span> {{ selectedEvent()?.location }}</p>
@@ -21,7 +26,8 @@
         (click)="deleteEventFanClub()">Eliminar
         evento</button>
     </div>
-    } @else {
+    }
+    @if(isEditing() && !isCreating()) {
     <div>
       <form class="space-y-6 text-start" [formGroup]="updateEventForm" (ngSubmit)="updateEventFanClub()">
         <h5 class="text-xl text-center font-medium text-gray-900">Editar Evento</h5>
@@ -64,7 +70,9 @@
 
         <div class="flex justify-center gap-x-6 mt-4">
           <button type="submit"
-            class="text-white bg-green-700 hover:bg-green-800 font-medium rounded-lg text-sm px-5 py-2.5 cursor-pointer">Guardar
+            class="text-white bg-green-700 hover:bg-green-800 font-medium rounded-lg text-sm px-5 py-2.5 cursor-pointer"
+            [ngClass]="{'opacity-50 cursor-not-allowed': updateEventForm.invalid, 'cursor-pointer': !updateEventForm.invalid}"
+            [disabled]="updateEventForm.invalid">Guardar
             cambios</button>
           <button type="button"
             class="text-white bg-gray-700 hover:bg-gray-800 font-medium rounded-lg text-sm px-5 py-2.5 cursor-pointer"
@@ -73,6 +81,71 @@
       </form>
     </div>
     }
+    @if (isCreating()) {
+    <div>
+      <form class="space-y-6 text-start" [formGroup]="newEventForm" (ngSubmit)="createEventFanClub()">
+        <h5 class="text-xl text-center font-medium text-gray-900">Crear nuevo evento</h5>
+        <div>
+          <label for="fanclub" class="block mb-2 text-sm font-medium text-gray-900">
+            Selecciona un Fan Club
+          </label>
+          <select formControlName="fanclub_id" id="fanclub"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+            placeholder="Selecciona una peña blaugrana">
+            @for (fanClub of fanClubs; track fanClub.id) {
+            <option [value]="fanClub.id">{{ fanClub.name }}</option>
+            }
 
+          </select>
+          @if (newEventForm.get('fanclub_id')?.invalid && newEventForm.get('fanclub_id')?.touched) {
+          <p class="text-red-500 text-sm">Debes seleccionar un Fan Club.</p>
+          }
+        </div>
+        <div>
+          <label for="name" class="block mb-2 text-sm font-medium text-gray-900">Nombre del evento</label>
+          <input type="text" formControlName="name" id="name"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+            placeholder="Nombre del evento">
+          @if (newEventForm.get('name')?.invalid && newEventForm.get('name')?.touched) {
+          <p class="text-red-500 text-sm">El nombre del evento debe tener mínimo 3 letras.</p>
+          }
+        </div>
+        <div>
+          <label for="eventDate" class="block mb-2 text-sm font-medium text-gray-900">Fecha del evento</label>
+          <input type="date" formControlName="date" id="eventDate"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+          @if (newEventForm.get('date')?.invalid && newEventForm.get('date')?.touched) {
+          <p class="text-red-500 text-sm">La fecha del evento es obligatoria.</p>
+          }
+        </div>
+        <div>
+          <label for="time" class="block mb-2 text-sm font-medium text-gray-900">Hora de inicio del evento</label>
+          <input type="time" formControlName="time" id="time"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+          @if (newEventForm.get('time')?.invalid && newEventForm.get('time')?.touched) {
+          <p class="text-red-500 text-sm">La hora del evento es obligatoria.</p>
+          }
+        </div>
+        <div>
+          <label for="location" class="block mb-2 text-sm font-medium text-gray-900">Ubicación del evento</label>
+          <input type="text" formControlName="location" id="location"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+            placeholder="Ubicación del evento">
+          @if (newEventForm.get('location')?.invalid && newEventForm.get('location')?.touched) {
+          <p class="text-red-500 text-sm">La ubicación del evento es obligatoria.</p>
+          }
+        </div>
+        <div class="flex justify-center gap-x-6 mt-4">
+          <button type="submit"
+            class="text-white bg-green-700 hover:bg-green-800 font-medium rounded-lg text-sm px-5 py-2.5 cursor-pointer"
+            [ngClass]="{'opacity-50 cursor-not-allowed': newEventForm.invalid, 'cursor-pointer': !newEventForm.invalid}"
+            [disabled]="newEventForm.invalid">Crear eventos</button>
+          <button type="button"
+            class="text-white bg-gray-700 hover:bg-gray-800 font-medium rounded-lg text-sm px-5 py-2.5 cursor-pointer"
+            (click)="closeModal()">Cancelar</button>
+        </div>
+      </form>
+    </div>
+    }
   </div>
 </div>
