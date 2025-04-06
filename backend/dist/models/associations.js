@@ -8,9 +8,9 @@ const fanClub_1 = __importDefault(require("./fanClub"));
 exports.FanClub = fanClub_1.default;
 const eventClub_1 = __importDefault(require("./eventClub"));
 exports.EventClub = eventClub_1.default;
-fanClub_1.default.hasOne(eventClub_1.default, {
+fanClub_1.default.hasMany(eventClub_1.default, {
     foreignKey: "fanclub_id",
-    as: "event",
+    as: "events",
 });
 eventClub_1.default.belongsTo(fanClub_1.default, {
     foreignKey: "fanclub_id",

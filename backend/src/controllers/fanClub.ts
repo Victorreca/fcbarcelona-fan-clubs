@@ -1,49 +1,70 @@
 import { Request, Response } from "express";
 import FanClub from "../models/fanClub";
+import EventClub from "../models/eventClub";
 import { Parser } from "json2csv";
+import "../models/associations";
 
 export const getFansClub = async (req: Request, res: Response) => {
-  const listFanClubs = await FanClub.findAll();
+  try {
+    const listFanClubs = await FanClub.findAll({
+      include: [{ model: EventClub, as: "events" }],
+    });
 
-  listFanClubs
-    ? res.json(listFanClubs)
-    : res.status(404).json({ msg: `No fan clubs` });
+    listFanClubs
+      ? res.json(listFanClubs)
+      : res.status(404).json({ msg: `No fan clubs` });
+  } catch (error) {
+    console.error("Error fetching fan clubs:", error);
+    res.status(500).json({ msg: "Error fetching fan clubs", error });
+  }
 };
 
-export const getFanClub = async (req: Request, res: Response) => {
+export const getFanClub = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   const { id } = req.params;
-  const fanClub = await FanClub.findByPk(id);
+  try {
+    const fanClub = await FanClub.findByPk(id, {
+      include: [{ model: EventClub, as: "events" }],
+    });
 
-  fanClub
-    ? res.json(fanClub)
-    : res.status(404).json({ msg: `Fan club with id ${id} not found` });
+    fanClub
+      ? res.json(fanClub)
+      : res.status(404).json({ msg: `Fan club with id ${id} not found` });
+  } catch (error) {
+    console.error("Error fetching fan club:", error);
+    res.status(500).json({ msg: "Error fetching fan club", error });
+  }
 };
 
 export const deleteFanClub = async (req: Request, res: Response) => {
   const { id } = req.params;
   const fanClub = await FanClub.findByPk(id);
 
-  if (fanClub) {
-    await fanClub.destroy();
-    res.json({ msg: `Fan club with id ${id} deleted` });
-  } else {
-    res.status(404).json({ msg: `Fan club with id ${id} not found` });
+  try {
+    if (fanClub) {
+      await fanClub.destroy();
+      res.json({ msg: `Fan club with id ${id} deleted` });
+    } else {
+      res.status(404).json({ msg: `Fan club with id ${id} not found` });
+    }
+  } catch (error) {
+    res.status(500).json({ msg: "Error deleting fanclub", error });
   }
 };
 
 export const addFanClub = async (req: Request, res: Response) => {
   const { body } = req;
   try {
-    await FanClub.create(body);
+    const newFanClub = await FanClub.create(body);
 
-    res.json({
-      msg: "Add Fan club",
-    });
+    console.log("✅ Peña creada:", newFanClub.toJSON());
+    res.status(201).json(newFanClub);
   } catch (error) {
     console.log(error);
-    res.json({
-      msg: "Ups something went wrong",
-    });
+    console.log("❌ Error al crear la peña:", error);
+    res.status(500).json({ msg: "Something went wrong" });
   }
 };
 
@@ -55,7 +76,7 @@ export const updateFanClub = async (req: Request, res: Response) => {
     const fanClub = await FanClub.findByPk(id);
 
     if (fanClub) {
-      await fanClub?.update(body);
+      await fanClub.update(body);
       res.json({
         msg: `Update Fan club with id ${id}`,
       });
@@ -64,9 +85,7 @@ export const updateFanClub = async (req: Request, res: Response) => {
     }
   } catch (error) {
     console.log(error);
-    res.json({
-      msg: "Ups something went wrong",
-    });
+    res.status(500).json({ msg: "Error updating Fan Club" });
   }
 };
 

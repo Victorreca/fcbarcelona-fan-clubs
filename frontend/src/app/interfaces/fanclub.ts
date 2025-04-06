@@ -8,5 +8,5 @@ export interface FanClub {
   longitude?: number;
   foundedYear: number;
   membersCount: number;
-  event?: FanClubEvent;
+  events: FanClubEvent[];
 }

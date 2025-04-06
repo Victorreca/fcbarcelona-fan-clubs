@@ -1,16 +1,47 @@
 import { Routes } from '@angular/router';
-import { HomeComponent } from './components/home/home.component';
-import { MapComponent } from './components/map/map.component';
-import { CalendarComponent } from './components/calendar/calendar.component';
-import { ChartsComponent } from './components/charts/charts.component';
-import { AddEditFanclubComponent } from './components/add-edit-fanclub/add-edit-fanclub.component';
 
 export const routes: Routes = [
-  { path: '', component: HomeComponent },
-  { path: 'add', component: AddEditFanclubComponent },
-  { path: 'edit/:id', component: AddEditFanclubComponent },
-  { path: 'mapa', component: MapComponent },
-  { path: 'calendar', component: CalendarComponent },
-  { path: 'charts', component: ChartsComponent },
-  { path: '**', redirectTo: '', pathMatch: 'full' },
+  {
+    path: '',
+    loadComponent: () =>
+      import('./components/home/home.component').then((m) => m.HomeComponent),
+  },
+  {
+    path: 'add',
+    loadComponent: () =>
+      import('./components/add-edit-fanclub/add-edit-fanclub.component').then(
+        (m) => m.AddEditFanclubComponent
+      ),
+  },
+  {
+    path: 'edit/:id',
+    loadComponent: () =>
+      import('./components/add-edit-fanclub/add-edit-fanclub.component').then(
+        (m) => m.AddEditFanclubComponent
+      ),
+  },
+  {
+    path: 'mapa',
+    loadComponent: () =>
+      import('./components/map/map.component').then((m) => m.MapComponent),
+  },
+  {
+    path: 'calendario',
+    loadComponent: () =>
+      import('./components/calendar/calendar.component').then(
+        (m) => m.CalendarComponent
+      ),
+  },
+  {
+    path: 'charts',
+    loadComponent: () =>
+      import('./components/charts/charts.component').then(
+        (m) => m.ChartsComponent
+      ),
+  },
+  {
+    path: '**',
+    redirectTo: '',
+    pathMatch: 'full',
+  },
 ];
