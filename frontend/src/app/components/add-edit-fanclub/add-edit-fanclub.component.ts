@@ -121,7 +121,6 @@ export class AddEditFanclubComponent implements OnInit {
   getFanClub(id: number) {
     this.loading = true;
     this.fanClubService.getFanClub(id).subscribe((data: FanClub) => {
-      console.log('FanclubData', data);
       this.loading = false;
       const eventClub: Partial<FanClubEvent> =
         data.events && data.events.length > 0 ? data.events[0] : {};
@@ -146,7 +145,6 @@ export class AddEditFanclubComponent implements OnInit {
   addFcbClub() {
     if (this.addClubForm.valid) {
       const newFanClub: FanClub = this.addClubForm.value;
-      console.log('Peña que se enviará:', newFanClub);
 
       if (this.fanClubId !== 0) {
         this.loading = true;
@@ -170,18 +168,13 @@ export class AddEditFanclubComponent implements OnInit {
                   this.eventFanClubService
                     .addFanClubEvent(eventData)
                     .subscribe({
-                      next: (eventRes) => {
-                        console.log(
-                          '✅ Add event with id' + eventData.id,
-                          eventRes
-                        );
+                      next: () => {
                         this.toastr.success(
                           'Evento añadido con éxito',
                           'Evento registrado'
                         );
                       },
-                      error: (err) => {
-                        console.error('❌ Error al añadir el evento:', err);
+                      error: () => {
                         this.toastr.error(
                           'No se pudo añadir el evento',
                           'Error'
@@ -221,7 +214,6 @@ export class AddEditFanclubComponent implements OnInit {
         this.fanClubService.addFanClub(newFanClub).subscribe({
           next: (res: any) => {
             const fanclubId = res?.id;
-            console.log('📌 fanclub_id asignado:', fanclubId);
             this.loading = false;
             const eventClub = this.addClubForm.get('eventClub')?.value;
 
@@ -234,8 +226,6 @@ export class AddEditFanclubComponent implements OnInit {
                 fanclub_id: fanclubId,
               };
 
-              console.log('✅ Evento que se enviará:', newEvent);
-
               this.eventFanClubService.addFanClubEvent(newEvent).subscribe({
                 next: (eventRes) => {
                   console.log('Evento añadido con éxito', eventRes);
@@ -245,7 +235,6 @@ export class AddEditFanclubComponent implements OnInit {
                 },
               });
             }
-            console.log('Peña añadida con éxito', res);
             this.toastr.success('Peña añadida con éxito', 'Peña registrada');
             this.router.navigate(['/']);
           },

@@ -48,6 +48,8 @@ export class CalendarComponent implements OnInit {
     events: [],
     weekends: true,
     editable: true,
+    eventStartEditable: false,
+    eventDurationEditable: false,
     selectable: true,
     selectMirror: true,
     dayMaxEvents: true,
@@ -126,7 +128,13 @@ export class CalendarComponent implements OnInit {
   }
 
   handleEvents(events: EventApi[]) {
-    this.currentEvents.set(events);
+    const sortedEvents = events.sort((a, b) => {
+      const dateA = a.start?.getTime() || 0;
+      const dateB = b.start?.getTime() || 0;
+      return dateA - dateB;
+    });
+
+    this.currentEvents.set(sortedEvents);
   }
 
   getFanClubColorClass(event: any): string {

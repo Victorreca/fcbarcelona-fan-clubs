@@ -26,7 +26,6 @@ export class ListFanclubsComponent implements OnInit {
   getListFanClubs() {
     this.loading = true;
     this.fanClubService.getListFanClubs().subscribe((data: FanClub[]) => {
-      console.log('Datos recibidos:', data);
       this.listFanclubs = data;
       this.loading = false;
     });
