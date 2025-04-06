@@ -7,6 +7,13 @@ export const routes: Routes = [
       import('./components/home/home.component').then((m) => m.HomeComponent),
   },
   {
+    path: 'penas-blaugrana',
+    loadComponent: () =>
+      import('./components/list-fanclubs/list-fanclubs.component').then(
+        (m) => m.ListFanclubsComponent
+      ),
+  },
+  {
     path: 'add',
     loadComponent: () =>
       import('./components/add-edit-fanclub/add-edit-fanclub.component').then(
