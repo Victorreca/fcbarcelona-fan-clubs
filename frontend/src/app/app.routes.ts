@@ -40,7 +40,7 @@ export const routes: Routes = [
       ),
   },
   {
-    path: 'charts',
+    path: 'graficos',
     loadComponent: () =>
       import('./components/charts/charts.component').then(
         (m) => m.ChartsComponent

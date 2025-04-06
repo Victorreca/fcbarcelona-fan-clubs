@@ -2,9 +2,28 @@
   <img src="assets/img/fans-fcbarcelona.png" class="absolute top-0 left-0 w-full h-full object-cover"
     alt="Peña blaugrana" />
 
-  <div class="relative z-10 flex items-center justify-center h-full">
-    <h1 class="text-balance text-white text-4xl md:text-6xl font-bold text-center drop-shadow-lg max-w-3xl mx-auto">
-      ¡Bienvenidos a la web para las Peñas del Barça!
+  <div class="relative z-10 flex flex-col items-center justify-center h-full text-center gap-6 px-4">
+    <h1 class="text-white text-4xl md:text-6xl font-bold drop-shadow-lg max-w-3xl">
+      ¡Bienvenidos a la web<br />para las Peñas del Barça!
     </h1>
+
+    <div class="grid grid-cols-2 gap-4 pt-3">
+      <a routerLink="/add"
+        class="flex justify-center items-center text-white bg-[#1D267D] hover:brightness-110 focus:ring-2 focus:ring-[#3b4bc4] font-medium rounded-lg text-sm px-5 py-2.5 cursor-pointer text-center">
+        Ver Peñas
+      </a>
+      <a routerLink="/mapa"
+        class="flex justify-center items-center text-white bg-[#8A1538] hover:brightness-110 focus:ring-2 focus:ring-[#c0395f] font-medium rounded-lg text-sm px-5 py-2.5 cursor-pointer text-center">
+        Mapa de Peñas
+      </a>
+      <a routerLink="/calendario"
+        class="flex justify-center items-center text-white bg-[#FDB913] hover:brightness-110 focus:ring-2 focus:ring-[#ffe082] font-medium rounded-lg text-sm px-5 py-2.5 cursor-pointer text-center">
+        Calendario
+      </a>
+      <a routerLink="/graficos"
+        class="flex justify-center items-center text-white bg-[#004D98] hover:brightness-110 focus:ring-2 focus:ring-[#3a72d8] font-medium rounded-lg text-sm px-5 py-2.5 cursor-pointer text-center">
+        Gráficos
+      </a>
+    </div>
   </div>
 </div>
