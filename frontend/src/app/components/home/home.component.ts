@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { ListFanclubsComponent } from '../list-fanclubs/list-fanclubs.component';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-home',
-  imports: [ListFanclubsComponent],
+  imports: [RouterLink],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
