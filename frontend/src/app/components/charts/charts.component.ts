@@ -21,10 +21,7 @@ export class ChartsComponent implements OnInit {
       const groupedByYear = this.groupByFoundedYear(fanclubs);
       const years = Object.keys(groupedByYear);
       const counts = Object.values(groupedByYear);
-
       this.renderChart('bar', 'barchart', years, counts);
-      // this.renderChart('pie', 'piechart', years, counts);
-      // this.renderChart('doughnut', 'dochart', years, counts);
     });
 
     this.eventFanclubService.getFanClubEvents(0).subscribe((events) => {

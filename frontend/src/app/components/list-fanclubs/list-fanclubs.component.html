@@ -4,12 +4,10 @@
 </div>
 } @else {
 <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-  @if(listFanclubs.length > 0){ <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+  @if(listFanclubs.length > 0){
+  <table class="w-full text-sm text-left rtl:text-right text-gray-500">
     <thead class="text-xs text-gray-700 uppercase bg-gray-50">
       <tr>
-        <th scope="col" class="px-6 py-3">
-          ID
-        </th>
         <th scope="col" class="px-6 py-3">
           Peña Blaugrana
         </th>
@@ -33,9 +31,6 @@
     <tbody>
       @for(fanclub of listFanclubs; track fanclub.id){
       <tr class="odd:bg-white even:bg-gray-50  border-b border-gray-200">
-        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-          {{fanclub.id}}
-        </th>
         <td class="px-6 py-4">
           {{fanclub.name}}
         </td>

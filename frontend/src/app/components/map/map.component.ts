@@ -14,9 +14,11 @@ export class MapComponent implements OnInit {
   private userMarker: L.Marker | undefined;
   private toastr = inject(ToastrService);
   private fanClubService = inject(FanclubService);
+  private layerGroups: { [key: string]: L.LayerGroup } = {};
 
   ngOnInit(): void {
     this.initMap();
+    this.initLayerGroups();
     this.loadFanClubs();
   }
 
@@ -28,6 +30,26 @@ export class MapComponent implements OnInit {
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(
       this.map
     );
+  }
+
+  initLayerGroups() {
+    this.layerGroups = {
+      small: L.layerGroup().addTo(this.map),
+      medium: L.layerGroup().addTo(this.map),
+      large: L.layerGroup().addTo(this.map),
+    };
+
+    L.control
+      .layers(
+        undefined,
+        {
+          '< 50 Miembros': this.layerGroups['small'],
+          '50 - 200 Miembros': this.layerGroups['medium'],
+          '> 200 miembros': this.layerGroups['large'],
+        },
+        { collapsed: false }
+      )
+      .addTo(this.map);
   }
 
   loadFanClubs() {
@@ -59,6 +81,14 @@ export class MapComponent implements OnInit {
       marker.on('click', () => {
         this.toastr.info(`Ubicación de ${fanclub.name}`, 'Información');
       });
+
+      if (fanclub.membersCount <= 50) {
+        marker.addTo(this.layerGroups['small']);
+      } else if (fanclub.membersCount <= 200) {
+        marker.addTo(this.layerGroups['medium']);
+      } else {
+        marker.addTo(this.layerGroups['large']);
+      }
     }
   }
 
