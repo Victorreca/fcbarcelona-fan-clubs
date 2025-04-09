@@ -35,4 +35,9 @@ export class FanclubService {
       fanClub
     );
   }
+  downloadFanClubs() {
+    return this.http.get(`${this.myAppUrl}${this.myApiUrl}download`, {
+      responseType: 'blob',
+    });
+  }
 }

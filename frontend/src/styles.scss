@@ -1,1 +1,47 @@
 @use "tailwindcss";
+// Fullcalendar styles
+.fc {
+  .fc-daygrid-day {
+    cursor: pointer;
+  }
+  .fc-daygrid-day-number {
+    padding: 0;
+    @media (min-width: 1024px) {
+      padding: 4px;
+    }
+  }
+  .fc-toolbar {
+    &.fc-header-toolbar {
+      display: block;
+      text-align: center;
+
+      .fc-toolbar-title {
+        padding: 5px 0;
+      }
+    }
+    @media (min-width: 1024px) {
+      &.fc-header-toolbar {
+        display: flex;
+        text-align: left;
+        .fc-toolbar-title {
+          padding: 0;
+        }
+      }
+    }
+  }
+}
+
+.leaflet-control-layers {
+  color: var(--color-gray-800);
+  font-family: var(
+    --default-font-family,
+    ui-sans-serif,
+    system-ui,
+    sans-serif,
+    "Apple Color Emoji",
+    "Segoe UI Emoji",
+    "Segoe UI Symbol",
+    "Noto Color Emoji"
+  );
+  font-size: 14px;
+}

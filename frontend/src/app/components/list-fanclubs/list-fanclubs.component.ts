@@ -37,5 +37,17 @@ export class ListFanclubsComponent implements OnInit {
       this.getListFanClubs();
     });
     this.toastr.warning('Peña eliminada con éxito', 'Peña eliminada');
+    this.loading = false;
+  }
+
+  downloadFanClubs() {
+    this.fanClubService.downloadFanClubs().subscribe((blob) => {
+      const a = document.createElement('a');
+      const objectUrl = URL.createObjectURL(blob);
+      a.href = objectUrl;
+      a.download = 'fanclubs.csv';
+      a.click();
+      URL.revokeObjectURL(objectUrl);
+    });
   }
 }

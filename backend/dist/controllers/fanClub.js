@@ -12,48 +12,70 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateFanClub = exports.addFanClub = exports.deleteFanClub = exports.getFanClub = exports.getFansClub = void 0;
+exports.downloadFanClubs = exports.updateFanClub = exports.addFanClub = exports.deleteFanClub = exports.getFanClub = exports.getFansClub = void 0;
 const fanClub_1 = __importDefault(require("../models/fanClub"));
+const eventClub_1 = __importDefault(require("../models/eventClub"));
+const json2csv_1 = require("json2csv");
+require("../models/associations");
 const getFansClub = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const listFanClubs = yield fanClub_1.default.findAll();
-    listFanClubs
-        ? res.json(listFanClubs)
-        : res.status(404).json({ msg: `No fan clubs` });
+    try {
+        const listFanClubs = yield fanClub_1.default.findAll({
+            include: [{ model: eventClub_1.default, as: "events" }],
+        });
+        listFanClubs
+            ? res.json(listFanClubs)
+            : res.status(404).json({ msg: `No fan clubs` });
+    }
+    catch (error) {
+        console.error("Error fetching fan clubs:", error);
+        res.status(500).json({ msg: "Error fetching fan clubs", error });
+    }
 });
 exports.getFansClub = getFansClub;
 const getFanClub = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    const fanClub = yield fanClub_1.default.findByPk(id);
-    fanClub
-        ? res.json(fanClub)
-        : res.status(404).json({ msg: `Fan club with id ${id} not found` });
+    try {
+        const fanClub = yield fanClub_1.default.findByPk(id, {
+            include: [{ model: eventClub_1.default, as: "events" }],
+        });
+        fanClub
+            ? res.json(fanClub)
+            : res.status(404).json({ msg: `Fan club with id ${id} not found` });
+    }
+    catch (error) {
+        console.error("Error fetching fan club:", error);
+        res.status(500).json({ msg: "Error fetching fan club", error });
+    }
 });
 exports.getFanClub = getFanClub;
 const deleteFanClub = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     const fanClub = yield fanClub_1.default.findByPk(id);
-    if (fanClub) {
-        yield fanClub.destroy();
-        res.json({ msg: `Fan club with id ${id} deleted` });
+    try {
+        if (fanClub) {
+            yield fanClub.destroy();
+            res.json({ msg: `Fan club with id ${id} deleted` });
+        }
+        else {
+            res.status(404).json({ msg: `Fan club with id ${id} not found` });
+        }
     }
-    else {
-        res.status(404).json({ msg: `Fan club with id ${id} not found` });
+    catch (error) {
+        res.status(500).json({ msg: "Error deleting fanclub", error });
     }
 });
 exports.deleteFanClub = deleteFanClub;
 const addFanClub = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { body } = req;
     try {
-        yield fanClub_1.default.create(body);
-        res.json({
-            msg: "Add Fan club",
-        });
+        const newFanClub = yield fanClub_1.default.create(body);
+        console.log("✅ Peña creada:", newFanClub.toJSON());
+        res.status(201).json(newFanClub);
     }
     catch (error) {
         console.log(error);
-        res.json({
-            msg: "Ups something went wrong",
-        });
+        console.log("❌ Error al crear la peña:", error);
+        res.status(500).json({ msg: "Something went wrong" });
     }
 });
 exports.addFanClub = addFanClub;
@@ -63,7 +85,7 @@ const updateFanClub = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     try {
         const fanClub = yield fanClub_1.default.findByPk(id);
         if (fanClub) {
-            yield (fanClub === null || fanClub === void 0 ? void 0 : fanClub.update(body));
+            yield fanClub.update(body);
             res.json({
                 msg: `Update Fan club with id ${id}`,
             });
@@ -74,9 +96,37 @@ const updateFanClub = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     }
     catch (error) {
         console.log(error);
-        res.json({
-            msg: "Ups something went wrong",
-        });
+        res.status(500).json({ msg: "Error updating Fan Club" });
     }
 });
 exports.updateFanClub = updateFanClub;
+const downloadFanClubs = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const fanClubs = yield fanClub_1.default.findAll();
+        if (!fanClubs.length) {
+            res.status(404).json({ msg: "No hay peñas Blaugrana disponibles" });
+            return;
+        }
+        const fields = [
+            "id",
+            "name",
+            "location",
+            "latitude",
+            "longitude",
+            "foundedYear",
+            "membersCount",
+        ];
+        const json2csvParser = new json2csv_1.Parser({ fields });
+        let csvData = json2csvParser.parse(fanClubs);
+        const bom = "\uFEFF";
+        csvData = bom + csvData;
+        res.header("Content-Type", "text/csv; charset=utf-8");
+        res.attachment("fanclubs.csv");
+        res.send(csvData);
+    }
+    catch (error) {
+        console.error("Error al generar CSV:", error);
+        res.status(500).json({ msg: "Error al generar la descarga" });
+    }
+});
+exports.downloadFanClubs = downloadFanClubs;

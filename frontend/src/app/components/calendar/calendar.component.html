@@ -1,1 +1,56 @@
-<p>calendar works!</p>
+<div class='demo-app flex-col md:flex-row h-full'>
+  <div class='demo-app-sidebar w-full md:w-[300px] p-4 bg-blue-50 order-1 md:order-none space-y-6'>
+    <div class='demo-app-sidebar-section'>
+      <h2 class="text-lg font-semibold mb-2">Instrucciones</h2>
+      <ul class="list-disc list-inside space-y-1 text-sm">
+        <li>Seleccione las fechas y se le pedirá que cree un nuevo evento</li>
+        <li>Haz clic en un evento para editarlo o eliminarlo</li>
+      </ul>
+    </div>
+    <div class='demo-app-sidebar-section'>
+      <label class="flex items-center gap-2 text-sm">
+        <input type='checkbox' [checked]='calendarVisible()' (change)='handleCalendarToggle()' />
+        Mostrar calendario
+      </label>
+    </div>
+    <div class='demo-app-sidebar-section'>
+      <label class="flex items-center gap-2 text-sm">
+        <input type='checkbox' [checked]='calendarOptions().weekends' (change)='handleWeekendsToggle()' />
+        Mostrar fines de semana
+      </label>
+    </div>
+    <div class='demo-app-sidebar-section'>
+      <h2>Todos los eventos ({{currentEvents().length}})</h2>
+      <ul class="list-disc list-inside space-y-1 text-sm">
+        @for (event of currentEvents(); track $index) {
+        <li>
+          <strong>{{ event.start | date: 'dd/MM/yyyy' }}</strong> - Hora: {{ event.start | date: 'HH:mm' }}
+          @if(event.end){
+          a {{ event.end | date: 'HH:mm' }}
+          }
+          - {{ event.title }}
+        </li>
+
+        }
+      </ul>
+    </div>
+  </div>
+
+  <div class='demo-app-main flex-1'>
+    @if(calendarVisible()){
+    <full-calendar [options]='calendarOptions()'>
+      <ng-template #eventContent let-arg>
+        <div class="custom-event w-100 p-2" [ngClass]="getFanClubColorClass(arg.event)">
+          <b>{{ arg.timeText }}</b>
+          <span class="block text-ellipsis overflow-hidden">{{ arg.event.title }}</span>
+          <span class="block text-ellipsis overflow-hidden">Lugar: {{ arg.event.extendedProps.location }}</span>
+          <span class="text-ellipsis overflow-hidden">Peña: {{ arg.event.extendedProps.fanClubName }}</span>
+        </div>
+      </ng-template>
+    </full-calendar>
+    }
+  </div>
+  @if (isModalOpen()) {
+  <app-modal-calendar></app-modal-calendar>
+  }
+</div>

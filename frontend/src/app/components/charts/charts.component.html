@@ -1,1 +1,20 @@
-<p>charts works!</p>
+<div class="max-w-6xl mx-auto px-4 py-8">
+  <h1 class="text-3xl font-bold text-center mb-10">Estadísticas de Peñas Blaugrana</h1>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <div class="bg-white rounded-2xl shadow-xl p-6 flex flex-col min-h-[400px]">
+      <h3 class="text-xl font-semibold text-blue-900 text-center mb-4 text-balance">Peñas fundadas por año
+      </h3>
+      <div class="flex-1 flex items-center justify-center">
+        <canvas id="barchart" class="w-full"></canvas>
+      </div>
+    </div>
+    <div class="bg-white rounded-2xl shadow-xl p-6 flex flex-col min-h-[400px]">
+      <h3 class="text-xl font-semibold text-rose-800 text-center mb-4 text-balance">Número de eventos mensuales
+        organizados por las
+        Peñas</h3>
+      <div class="flex-1 flex items-center justify-center">
+        <canvas id="dochart" class="w-full max-w-[350px] aspect-[1/1]"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
