@@ -21,7 +21,7 @@ require("../models/associations");
 class Server {
     constructor() {
         this.app = (0, express_1.default)();
-        this.port = process.env.PORT || "3001";
+        this.port = process.env.PORT || "3000";
         this.listen();
         this.middlewares();
         this.routes();
