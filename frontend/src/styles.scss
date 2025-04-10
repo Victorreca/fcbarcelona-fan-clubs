@@ -1,6 +1,13 @@
 @use "tailwindcss";
 // Fullcalendar styles
 .fc {
+  .fc-button-primary {
+    background-color: #004d98;
+    border-color: #004d98;
+  }
+  .fc-button-primary:not(:disabled).fc-button-active {
+    background-color: #a50044;
+  }
   .fc-daygrid-day {
     cursor: pointer;
   }
@@ -45,3 +52,10 @@
   );
   font-size: 14px;
 }
+// .fc .fc-button-primary {
+//   background-color: #004d98;
+//   border-color: #004d98;
+// }
+// .fc .fc-button-primary:not(:disabled).fc-button-active {
+//   background-color: #a50044;
+// }
